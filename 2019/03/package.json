@@ -1,0 +1,16 @@
+{
+  "name": "advent-of-code-2019-03",
+  "version": "1.0.0",
+  "description": "advent of code 2019 day 3 solution",
+  "main": "03.js",
+  "scripts": {
+    "start": "node 03.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Khayyam Saleem",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5"
+  }
+}
