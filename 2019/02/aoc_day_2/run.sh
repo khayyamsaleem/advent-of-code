@@ -1,0 +1,3 @@
+#!/bin/sh
+$AOC_DAY_2 1
+$AOC_DAY_2 2 19690720

@@ -4,7 +4,11 @@
 `nimble build`
 
 ## Run
-Create `.env` file with `session=<aoc session cookie from browser>"
+Create `.env` file with:
+
+```
+session=<aoc session cookie from browser>
+```
 
 `./aoc_day_2 1` runs part one
 
