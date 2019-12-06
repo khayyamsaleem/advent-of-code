@@ -3,6 +3,7 @@ import requests
 from dotenv import load_dotenv
 from typing import Tuple, Callable, List
 
+# retrieves puzzle input from session token
 def get_puzzle_input(session_token: str) -> Tuple[int,int]:
     inputs = list(map(int,requests.get(
         "https://adventofcode.com/2019/day/4/input",
@@ -10,6 +11,7 @@ def get_puzzle_input(session_token: str) -> Tuple[int,int]:
     ).text.strip().split('-')))
     return inputs[0], inputs[1]
 
+# part one constraint
 def has_adjacent_double(x: int) -> bool:
     c = str(x)
     for i in range(10):
@@ -17,6 +19,7 @@ def has_adjacent_double(x: int) -> bool:
             return True
     return False
 
+# part two constraint
 def has_adjacent_double_isolated(x: int) -> bool:
     c = str(x)
     for i in range(10):
@@ -24,6 +27,7 @@ def has_adjacent_double_isolated(x: int) -> bool:
             return True
     return False
 
+# part one and two constraint
 def non_decreasing(x: int) -> bool:
     s = str(x)
     p = 0
@@ -33,6 +37,7 @@ def non_decreasing(x: int) -> bool:
         p = int(c)
     return True
 
+# constraint-driven solution generator
 def amt_in_range_meeting_constraints(
         l: int,
         u: int,
@@ -53,7 +58,7 @@ def partTwo(l: int, u: int) -> int:
     ])
 
 if __name__ == "__main__":
-    load_dotenv()
+    load_dotenv() # loads in 'session' environment variable
     lower, upper = get_puzzle_input(os.getenv("session"))
     print(partOne(lower, upper))
     print(partTwo(lower, upper))
