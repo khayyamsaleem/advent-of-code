@@ -10,6 +10,7 @@ session=<aoc session cookie from browser>
 ## Run
 
 ```bash
+raco pkg install
 raco exe -o ham-aocd5 main.rkt
 ./ham-aocd5
 ```
