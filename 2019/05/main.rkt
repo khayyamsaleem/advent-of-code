@@ -3,7 +3,6 @@
 (require net/url)
 (require dotenv)
 (require "intcode-computer.rkt")
-(require "cheat.rkt")
 
 (module+ test
   (require rackunit))
