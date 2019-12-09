@@ -99,3 +99,4 @@ compiled/
 *.dep
 
 # End of https://www.gitignore.io/api/macos,emacs,racket
+doc
