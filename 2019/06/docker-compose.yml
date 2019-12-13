@@ -8,7 +8,7 @@ services:
             - "7474:7474"
         environment:
             NEO4J_AUTH: none
-            NEO4JLABS_PLUGINS: "[\"apoc\", \"graph-algorithms\"]"
+            NEO4JLABS_PLUGINS: "[\"graph-algorithms\"]"
             NEO4J_dbms_security_procedures_unrestricted: "algo.*"
     solution:
         build: .

@@ -43,11 +43,9 @@ function partOne($neo4j_client) {
 }
 
 function partTwo($neo4j_client) {
-    $QUERY = 'MATCH (start:Object {name:"YOU"}), (end:Object {name:"SAN"})
-              CALL algo.shortestPath.stream(start, end, "cost")
-              YIELD cost
-              RETURN MAX(cost) - 2';
-    return $neo4j_client->run($QUERY)->getRecord()->value("MAX(cost) - 2");
+    $QUERY = 'MATCH path=(:Object {name: "YOU"})-[*]-(:Object {name: "SAN"})
+              RETURN length(path) - 2';
+    return $neo4j_client->run($QUERY)->getRecord()->value("length(path) - 2");
 }
 
 function main() {
