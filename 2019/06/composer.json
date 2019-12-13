@@ -1,0 +1,16 @@
+{
+    "name": "ham/advent-of-code-2019-06",
+    "description": "Solution code for advent of code 2019 day 6",
+    "type": "project",
+    "require": {
+        "graphaware/neo4j-php-client": "^4.8",
+        "vlucas/phpdotenv": "^4.0",
+        "nategood/httpful": "^0.2.20"
+    },
+    "authors": [
+        {
+            "name": "Khayyam Saleem",
+            "email": "hello@khayyam.me"
+        }
+    ]
+}

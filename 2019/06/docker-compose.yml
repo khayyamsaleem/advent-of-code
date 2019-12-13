@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+    neo4j:
+        image: neo4j
+        ports:
+            - "7687:7687"
+            - "7474:7474"
+        environment:
+            NEO4J_AUTH: none
+            NEO4JLABS_PLUGINS: "[\"apoc\", \"graph-algorithms\"]"
+            NEO4J_dbms_security_procedures_unrestricted: "algo.*"
+    solution:
+        build: .
+        depends_on:
+            - neo4j
