@@ -50,8 +50,8 @@
     [(eq? mode POSITION_MODE) (vector-ref prg (vector-ref prg pos))]
     [else 'get-param-val-error]))
 
-(define (eval-intcode prg [user-input 1])
-  (define (iter prg cur)
+(define (eval-intcode prg [user-input '()])
+  (define (iter prg cur user-input)
     (cond
       [(empty? prg) 'eval-intcode-error]
       [else
@@ -70,7 +70,7 @@
               (begin
                 ; (displayln (format "PLUS AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 dest))
                 (vector-set! prg dest (+ arg1 arg2))
-                (iter prg (+ cur 4))
+                (iter prg (+ cur 4) user-input)
                 ))]
            [(= opcode  MUL)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
@@ -81,20 +81,20 @@
               (begin
                 ; (displayln (format "MUL AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 dest))
                 (vector-set! prg dest (* arg1 arg2))
-                (iter prg (+ cur 4))
+                (iter prg (+ cur 4) user-input)
                 ))]
            [(= opcode MOVE)
             (let ([dest (get-param-val prg POSITION_MODE (+ cur 1) #t)])
               (begin
                 ; (displayln (format "MOV AT POS ~a with args: ~a" cur dest))
-                (vector-set! prg dest user-input)
-                (iter prg (+ cur 2))
+                (vector-set! prg dest (car user-input))
+                (iter prg (+ cur 2) (cdr user-input))
                 ))]
            [(= opcode  OUT)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))])
               (begin
                 (displayln (format "DIAGNOSTIC CODE: ~a" arg1))
-                (iter prg (+ cur 2))
+                (iter prg (+ cur 2) user-input)
                 ))]
            [(= opcode  JIT)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
@@ -102,16 +102,16 @@
               (begin
                 ; (displayln (format "JIT AT POS ~a with args: ~a ~a" cur arg1 arg2))
                 (if (not (zero? arg1))
-                  (iter prg arg2)
-                  (iter prg (+ cur 3)))))]
+                  (iter prg arg2 user-input)
+                  (iter prg (+ cur 3) user-input))))]
            [(= opcode  JIF)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
                   [arg2 (get-param-val prg param-mode-2 (+ cur 2))])
               (begin
                 ; (displayln (format "JIF AT POS ~a with args: ~a ~a" cur arg1 arg2))
                 (if (zero? arg1)
-                  (iter prg arg2)
-                  (iter prg (+ cur 3)))))]
+                  (iter prg arg2 user-input)
+                  (iter prg (+ cur 3) user-input))))]
            [(= opcode BRLT)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
                   [arg2 (get-param-val prg param-mode-2 (+ cur 2))]
@@ -120,11 +120,11 @@
                   (begin
                     ; (displayln (format "BRLT AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 arg3))
                     (vector-set! prg arg3 1)
-                    (iter prg (+ cur 4)))
+                    (iter prg (+ cur 4) user-input))
                   (begin
                     ; (displayln (format "BRLT AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 arg3))
                     (vector-set! prg arg3 0)
-                    (iter prg (+ cur 4)))))]
+                    (iter prg (+ cur 4) user-input))))]
            [(= opcode BREQ)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
                   [arg2 (get-param-val prg param-mode-2 (+ cur 2))]
@@ -133,27 +133,27 @@
                   (begin
                     ; (displayln (format "BREQ AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 arg3))
                     (vector-set! prg arg3 1)
-                    (iter prg (+ cur 4)))
+                    (iter prg (+ cur 4) user-input))
                   (begin
                     ; (displayln (format "BREQ AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 arg3))
                     (vector-set! prg arg3 0)
-                    (iter prg (+ cur 4)))))]
+                    (iter prg (+ cur 4) user-input))))]
            [(= opcode HALT)
             (let ([final (car (vector->list prg))])
             (begin
               (displayln (format "HALT: ~a" final))
-              (void)))]
+              final))]
            [else (begin
                    (displayln (format "ERROR: GOT TO ~a" cur)))]
            ))]))
-  (iter (list->vector prg) 0))
+  (iter (list->vector prg) 0 user-input))
 
 (module+ main
-  (eval-intcode '(1002 4 3 4 33))
-  (eval-intcode '(1101 100 -1 4 0))
+  (eval-intcode '(1002 4 3 4 33) '(1))
+  (eval-intcode '(1101 100 -1 4 0) '(1))
   (eval-intcode '(3 21 1008 21 8 20 1005 20 22 107 8 21 20 1006 20 31
 1106 0 36 98 0 0 1002 21 125 20 4 20 1105 1 46 104
-999 1105 1 46 1101 1000 1 20 4 20 1105 1 46 98 99) 8)
-  (eval-intcode '(3 12 6 12 15 1 13 14 13 4 13 99 -1 0 1 9) 0)
+999 1105 1 46 1101 1000 1 20 4 20 1105 1 46 98 99) '(8))
+  (eval-intcode '(3 12 6 12 15 1 13 14 13 4 13 99 -1 0 1 9) '(0))
   )
 

@@ -23,8 +23,8 @@
   (dotenv-load!)
   ; Part One
   (displayln "PART ONE")
-  (eval-intcode (get-challenge-input DAY_5_INPUT))
+  (eval-intcode (get-challenge-input DAY_5_INPUT) '(1))
   ; Part Two
   (displayln "PART ONE")
-  (eval-intcode (get-challenge-input DAY_5_INPUT) 5)
+  (eval-intcode (get-challenge-input DAY_5_INPUT) '(5))
 )
