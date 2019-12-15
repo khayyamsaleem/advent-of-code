@@ -12,17 +12,21 @@
          [(hash-table ('program program) ('inputs inputs))
             (hash
               'success #t
-              'result (eval-intcode program inputs))]
+              'result (eval-intcode program inputs #t))]
          [(hash-table ('program program))
             (hash
               'success #t
-              'result (eval-intcode program))]
+              'result (eval-intcode program) '() #t)]
          [_ (hash 'success #f)])))
 
 ;; URL routing table (URL dispatcher).
 (define-values (dispatch generate-url)
   (dispatch-rules
     [("eval") #:method "post" eval-endpoint]
+    [("health") #:method "get" (λ (req) (response/jsexpr (hash 'success #t)))]
+    [("") #:method "get"
+          (λ (req) (response/jsexpr
+                      (hash 'success #t 'message "hello from intcode server")))]
     [else (error "There is no procedure to handle the url.")]))
 
 (define (request-handler request)

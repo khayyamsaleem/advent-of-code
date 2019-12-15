@@ -50,7 +50,7 @@
     [(eq? mode POSITION_MODE) (vector-ref prg (vector-ref prg pos))]
     [else 'get-param-val-error]))
 
-(define (eval-intcode prg [user-input '()])
+(define (eval-intcode prg [user-input '()] [halt-at-output #f])
   (define (iter prg cur user-input)
     (cond
       [(empty? prg) 'eval-intcode-error]
@@ -87,6 +87,7 @@
             (let ([dest (get-param-val prg POSITION_MODE (+ cur 1) #t)])
               (begin
                 ; (displayln (format "MOV AT POS ~a with args: ~a" cur dest))
+                (displayln (format "getting user input: ~a" (car user-input)))
                 (vector-set! prg dest (car user-input))
                 (iter prg (+ cur 2) (cdr user-input))
                 ))]
@@ -94,7 +95,7 @@
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))])
               (begin
                 (displayln (format "DIAGNOSTIC CODE: ~a" arg1))
-                (iter prg (+ cur 2) user-input)
+                (if halt-at-output arg1 (iter prg (+ cur 2) user-input))
                 ))]
            [(= opcode  JIT)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
