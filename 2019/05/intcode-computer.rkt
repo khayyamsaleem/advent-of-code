@@ -52,8 +52,11 @@
 
 (define (eval-intcode prg [user-input '()] [resume-from 0])
   (define (iter prg cur user-input outputs)
+    (displayln "running")
     (cond
-      [(empty? prg) 'eval-intcode-error]
+      [(empty? prg)
+        (displayln "received empty program")
+        'eval-intcode-error]
       [else
        (let* ([opcode-and-param-modes (get-opcode-and-modes (vector-ref prg cur))]
               [opcode       (hash-ref opcode-and-param-modes "opcode")]
@@ -86,7 +89,10 @@
            [(= opcode MOVE)
             (let ([dest (get-param-val prg POSITION_MODE (+ cur 1) #t)])
               (if (empty? user-input)
-                  (hash 'program (vector->list prg) 'position cur 'output-signals outputs)
+                  (begin 
+                    (displayln "Blocked on user-input")
+                    (hash 'program (vector->list prg) 'position cur 'output-signals outputs)
+                  )
                   (begin
                     ; (displayln (format "MOV AT POS ~a with args: ~a" cur dest))
                     (displayln (format "getting user input: ~a" (car user-input)))

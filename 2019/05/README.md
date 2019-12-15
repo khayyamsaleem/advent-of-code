@@ -18,6 +18,6 @@ raco exe -o ham-aocd5 main.rkt
 ## Run with Docker
 
 ```bash
-docker build . -t ham-aocd5
+docker build . -f Dockerfile.solution -t ham-aocd5
 docker run ham-aocd5
 ```

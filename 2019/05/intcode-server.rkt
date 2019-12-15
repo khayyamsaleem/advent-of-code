@@ -4,7 +4,6 @@
 (require web-server/servlet)
 (require web-server/servlet-env)
 (require json)
-(require uuid)
 
 (define (eval-endpoint request)
   (define body (bytes->jsexpr (request-post-data/raw request)))
@@ -18,7 +17,7 @@
                     'output-signals output-signals
                     'program-counter program-counter
                     'program prg
-                    'halted #t
+                    'blocked #t
                     'result 'null)]
                 [(cons result outputs)
                     (hash
@@ -41,10 +40,12 @@
   (dispatch request))
 
 ;; Start the server.
-(serve/servlet
-  request-handler
-  #:launch-browser? #f
-  #:quit? #f
-  #:listen-ip "127.0.0.1"
-  #:port 1337
-  #:servlet-regexp #rx"")
+(module+ main
+  (serve/servlet
+    request-handler
+    #:launch-browser? #f
+    #:quit? #f
+    #:listen-ip "0.0.0.0"
+    #:port 1337
+    #:stateless? #t
+    #:servlet-regexp #rx""))
