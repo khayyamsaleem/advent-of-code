@@ -1,6 +1,7 @@
 #lang info
 (define collection "05")
 (define deps '("dotenv"
+               "uuid"
                "base"))
 (define build-deps '("at-exp-lib"
                      "scribble-lib" "racket-doc" "rackunit-lib"))

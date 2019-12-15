@@ -4,19 +4,48 @@
 (require web-server/servlet)
 (require web-server/servlet-env)
 (require json)
+(require uuid)
+
+(define program-states (make-hash))
+
+(define (save-program-state! prg pos)
+  (let ([k (uuid-symbol)])
+    (hash-set! program-states k (cons prg pos))
+    (symbol->string k)))
 
 (define (eval-endpoint request)
   (define body (bytes->jsexpr (request-post-data/raw request)))
   (response/jsexpr
     (match body
          [(hash-table ('program program) ('inputs inputs))
-            (hash
-              'success #t
-              'result (eval-intcode program inputs #t))]
-         [(hash-table ('program program))
-            (hash
-              'success #t
-              'result (eval-intcode program) '() #t)]
+            (let ([ret (eval-intcode program inputs)])
+              (match ret 
+                [(hash-table ('program prg) ('position instruction-pointer) ('output-signals output-signals))
+                  (hash
+                    'pid (save-program-state! prg instruction-pointer)
+                    'output-signals output-signals
+                    'halted #t
+                    'result 'null)]
+                [(cons result outputs)
+                    (hash
+                      'success #t
+                      'output-signals outputs
+                      'result result)]))]
+         [(hash-table ('pid pid) ('inputs inputs))
+          (match-let ([(cons prg pos) (hash-ref program-states (string->symbol pid))])
+            (let ([ret (eval-intcode prg inputs pos)])
+              (match ret 
+                [(hash-table ('program prog) ('position instruction-pointer) ('output-signals output-signals))
+                  (hash
+                    'pid (save-program-state! prog instruction-pointer)
+                    'output-signals output-signals
+                    'halted #t
+                    'result 'null)]
+                [(cons result outputs)
+                    (hash
+                      'success #t
+                      'output-signals outputs
+                      'result result)])))]
          [_ (hash 'success #f)])))
 
 ;; URL routing table (URL dispatcher).
