@@ -50,7 +50,7 @@
     [else 'get-param-val-error]))
 
 
-(define (eval-intcode prg [user-input '()] [resume-from 0] [pid 'null])
+(define (eval-intcode prg [user-input '()] [resume-from 0])
   (define (iter prg cur user-input outputs)
     (cond
       [(empty? prg) 'eval-intcode-error]

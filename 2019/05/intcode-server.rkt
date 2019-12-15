@@ -6,24 +6,18 @@
 (require json)
 (require uuid)
 
-(define program-states (make-hash))
-
-(define (save-program-state! prg pos)
-  (let ([k (uuid-symbol)])
-    (hash-set! program-states k (cons prg pos))
-    (symbol->string k)))
-
 (define (eval-endpoint request)
   (define body (bytes->jsexpr (request-post-data/raw request)))
   (response/jsexpr
     (match body
-         [(hash-table ('program program) ('inputs inputs))
-            (let ([ret (eval-intcode program inputs)])
+         [(hash-table ('program program) ('inputs inputs 'program_counter c))
+            (let ([ret (eval-intcode program inputs c)])
               (match ret 
-                [(hash-table ('program prg) ('position instruction-pointer) ('output-signals output-signals))
+                [(hash-table ('program prg) ('position program-counter) ('output-signals output-signals))
                   (hash
-                    'pid (save-program-state! prg instruction-pointer)
                     'output-signals output-signals
+                    'program-counter program-counter
+                    'program prg
                     'halted #t
                     'result 'null)]
                 [(cons result outputs)
@@ -31,21 +25,6 @@
                       'success #t
                       'output-signals outputs
                       'result result)]))]
-         [(hash-table ('pid pid) ('inputs inputs))
-          (match-let ([(cons prg pos) (hash-ref program-states (string->symbol pid))])
-            (let ([ret (eval-intcode prg inputs pos)])
-              (match ret 
-                [(hash-table ('program prog) ('position instruction-pointer) ('output-signals output-signals))
-                  (hash
-                    'pid (save-program-state! prog instruction-pointer)
-                    'output-signals output-signals
-                    'halted #t
-                    'result 'null)]
-                [(cons result outputs)
-                    (hash
-                      'success #t
-                      'output-signals outputs
-                      'result result)])))]
          [_ (hash 'success #f)])))
 
 ;; URL routing table (URL dispatcher).
