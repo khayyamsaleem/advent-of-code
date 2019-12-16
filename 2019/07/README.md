@@ -37,3 +37,5 @@ luarocks init
 ## Run with Docker
 
 Coming soon (maybe)
+
+EDIT: it's not coming, i can't take the time again to test it
