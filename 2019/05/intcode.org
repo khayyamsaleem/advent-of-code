@@ -46,7 +46,7 @@ The interpreter also has a notion of user-input, a queue of inputs to consume fr
 
 
 * End Goal
-Be able to extend the ~param=>arg~ and ~opcode_rules~ tables at runtime.
+Be able to extend the ~param_to_arg_rules~ and ~opcode_rules~ tables at runtime.
 
 ** Resources
 *** [[https://github.com/tonyg/racket-reloadable][a library to dynamically reload source files based on events]]
