@@ -1,0 +1,54 @@
+* Intcode Rules
+
+**  Vague type-signature-ish specification
+
+#+BEGIN_SRC
+
+program -> [instruction]
+
+instruction -> ([param_mode], opcode)
+
+len([param_mode]) == arity(opcode)
+
+evaluating an instruction mutates the program in-place.
+
+eval_param(program, mode, param) => param_val
+
+eval_opcode(opcode, opcode_rules, program, [param_vals]) -> mutated_program
+
+#+END_SRC
+
+The interpreter also has a notion of user-input, a queue of inputs to consume from at the user-input instruction. The program "blocks" when the input queue is empty and asks the evaluating entity for more input, thunking program state until it can continue.
+
+~param=>arg rules~
+| name      | param_mode | usage                                   |
+| ====      | ========== | =====                                   |
+| position  |          0 | (vector-ref prg (vector-ref prg param)) |
+| immediate |          1 | (vector-ref prg param)                  |
+
+
+~opcode_rules~
+
+| name | opcode | arity | usage                                      |
+| ==== |   ==== |  ==== | ============================               |
+| add  |      1 |     3 | ~(vector-set! prog arg3 (+ arg1 arg2))~    |
+| mul  |      2 |     3 | ~(vector-set! prog arg3 (+ arg1 arg2))~    |
+| move |      3 |     1 | ~(vector-set! prog arg1 (car user-input))~ |
+| out  |      4 |     1 | ~(displayln arg1) (cons arg1 outputs)~     |
+| jit  |      5 |     2 | ~(if (zero? arg1) (jmp arg2) (jmp 3))~     |
+| jif  |      6 |     2 | ~not jit~                                  |
+| brlt |      7 |     3 | ~(if (< arg1 arg2) (jmp arg3) (jmp 4))~    |
+| breq |      8 |     3 | ~(if (= arg1 arg2) (jmp arg3) (jmp 4))~    |
+| halt |     99 |     0 | ~(vector-ref prog 0)~                      |
+
+
+* End Goal
+Be able to extend the ~param=>arg~ and ~opcode_rules~ tables at runtime.
+
+** Resources
+*** [[https://github.com/tonyg/racket-reloadable][a library to dynamically reload source files based on events]]
+*** [[http://www.ccs.neu.edu/home/samth/match-ifl-full.pdf][a paper on a match-expander]]
+    
+
+* Notes
+It is very possible that the entire interpreter will need to be re-written to accomodate this design and functionality. I am fine with that.
