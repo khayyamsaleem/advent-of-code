@@ -10,4 +10,5 @@ This year, I want to try using a different language every day.
 05 => racket
 06 => php + Neo4j
 07 => lua
+08 => haskell
 ```
