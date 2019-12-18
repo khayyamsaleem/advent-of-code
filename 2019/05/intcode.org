@@ -10,25 +10,28 @@ instruction -> ([param_mode], opcode)
 
 len([param_mode]) == arity(opcode)
 
-evaluating an instruction mutates the program in-place.
 
-eval_param(program, mode, param) => param_val
+eval_param(program, param_to_arg_rules, mode, param) => arg
 
-eval_opcode(opcode, opcode_rules, program, [param_vals]) -> mutated_program
+eval_opcode(program, opcode_rules, opcode, [args]) -> mutated_program
 
 #+END_SRC
 
+
+Evaluating an instruction mutates the program in-place as of now.
+
+A program's execution state can be thunked as ~(program, instruction-pointer)~
+
 The interpreter also has a notion of user-input, a queue of inputs to consume from at the user-input instruction. The program "blocks" when the input queue is empty and asks the evaluating entity for more input, thunking program state until it can continue.
 
-~param=>arg rules~
-| name      | param_mode | usage                                   |
-| ====      | ========== | =====                                   |
-| position  |          0 | (vector-ref prg (vector-ref prg param)) |
-| immediate |          1 | (vector-ref prg param)                  |
+~param_to_arg_rules~
+| name      | param_mode | usage                                     |
+| ====      | ========== | =====                                     |
+| position  |          0 | ~(vector-ref prg (vector-ref prg param))~ |
+| immediate |          1 | ~(vector-ref prg param)~                  |
 
 
 ~opcode_rules~
-
 | name | opcode | arity | usage                                      |
 | ==== |   ==== |  ==== | ============================               |
 | add  |      1 |     3 | ~(vector-set! prog arg3 (+ arg1 arg2))~    |
