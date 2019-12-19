@@ -4,6 +4,21 @@
 
 ## Prereqs
 
+### Intcode Server
+In the day 5 folder, run:
+
+```bash
+docker-compose up
+```
+
+Remember to add:
+
+```
+127.0.0.1    intcode.docker.localhost
+```
+
+to your `/etc/hosts` file.
+
 ### Environment
 Create `.env` file with:
 
