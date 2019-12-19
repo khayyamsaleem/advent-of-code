@@ -11,7 +11,7 @@
     (match body
          [(hash-table ('program program) ('inputs inputs) ('program_counter c))
             (let ([ret (eval-intcode program inputs c)])
-              (match ret 
+              (match ret
                 [(hash-table ('program prg) ('position program-counter) ('output-signals output-signals))
                   (hash
                     'output-signals output-signals

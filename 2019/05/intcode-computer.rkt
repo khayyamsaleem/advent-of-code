@@ -1,6 +1,7 @@
 #lang racket
 
 (provide eval-intcode)
+(require data/gvector)
 
 ; opcodes
 (define PLUS  1)
@@ -11,11 +12,16 @@
 (define JIF   6)
 (define BRLT  7)
 (define BREQ  8)
+(define CBASE 9)
 (define HALT 99)
+
+(define RELATIVE_BASE 0)
+
 
 ; parameter modes
 (define POSITION_MODE 0)
 (define IMMEDIATE_MODE 1)
+(define RELATIVE_MODE 2)
 
 ; destructures instruction num into opcode and parameter modes
 (define (get-opcode-and-modes num)
@@ -45,34 +51,53 @@
   (cond
     [(or
       (and (eq? mode POSITION_MODE) writable)
-      (eq? mode IMMEDIATE_MODE)) (vector-ref prg pos)]
-    [(eq? mode POSITION_MODE) (vector-ref prg (vector-ref prg pos))]
+      (eq? mode IMMEDIATE_MODE)) (my-vector-ref prg pos)]
+    [(eq? mode POSITION_MODE) (my-vector-ref prg (my-vector-ref prg pos))]
+    [(and (eq? mode RELATIVE_MODE) writable)
+     (+ RELATIVE_BASE (my-vector-ref prg pos))]
+    [(eq? mode RELATIVE_MODE) (my-vector-ref prg (+ RELATIVE_BASE (my-vector-ref prg pos)))]
     [else 'get-param-val-error]))
+
+(define (my-vector-ref prg pos)
+  (if (>= pos (gvector-count prg))
+      0
+      (gvector-ref prg pos)))
+
+(define (my-vector-set! prg pos val)
+  (if (>= pos (gvector-count prg))
+        (begin
+          (for/gvector ([_ (in-range (gvector-count prg) pos)])
+                     (gvector-add! prg 0))
+          (gvector-add! prg val)
+          (void))
+        (gvector-set! prg pos val)))
 
 
 (define (eval-intcode prg [user-input '()] [resume-from 0])
   (define (iter prg cur user-input outputs)
     (displayln "running")
+    ; (displayln (format "base: ~a" RELATIVE_BASE))
     (cond
       [(empty? prg)
         (displayln "received empty program")
         'eval-intcode-error]
       [else
-       (let* ([opcode-and-param-modes (get-opcode-and-modes (vector-ref prg cur))]
+       (let* ([opcode-and-param-modes (get-opcode-and-modes (my-vector-ref prg cur))]
               [opcode       (hash-ref opcode-and-param-modes "opcode")]
               [param-mode-1 (hash-ref opcode-and-param-modes "pm1")]
               [param-mode-2 (hash-ref opcode-and-param-modes "pm2")]
               [param-mode-3 (hash-ref opcode-and-param-modes "pm3")])
+         ; (displayln (format "processing opcode ~a (~a,~a,~a)" opcode param-mode-1 param-mode-2 param-mode-3))
          (cond
            [(= opcode PLUS)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
                   [arg2 (get-param-val prg param-mode-2 (+ cur 2))]
                   ; this is a boolean flag and I don't like it
                   ; but the nature of the problem has forced my hand
-                  [dest (get-param-val prg POSITION_MODE (+ cur 3) #t)])
+                  [dest (get-param-val prg param-mode-3 (+ cur 3) #t)])
               (begin
                 ; (displayln (format "PLUS AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 dest))
-                (vector-set! prg dest (+ arg1 arg2))
+                (my-vector-set! prg dest (+ arg1 arg2))
                 (iter prg (+ cur 4) user-input outputs)
                 ))]
            [(= opcode  MUL)
@@ -80,23 +105,23 @@
                   [arg2 (get-param-val prg param-mode-2 (+ cur 2))]
                   ; this is a boolean flag and I don't like it
                   ; but the nature of the problem has forced my hand
-                  [dest (get-param-val prg POSITION_MODE (+ cur 3) #t)])
+                  [dest (get-param-val prg param-mode-3 (+ cur 3) #t)])
               (begin
                 ; (displayln (format "MUL AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 dest))
-                (vector-set! prg dest (* arg1 arg2))
+                (my-vector-set! prg dest (* arg1 arg2))
                 (iter prg (+ cur 4) user-input outputs)
                 ))]
            [(= opcode MOVE)
-            (let ([dest (get-param-val prg POSITION_MODE (+ cur 1) #t)])
+            (let ([dest (get-param-val prg param-mode-1 (+ cur 1) #t)])
               (if (empty? user-input)
-                  (begin 
+                  (begin
                     (displayln "Blocked on user-input")
-                    (hash 'program (vector->list prg) 'position cur 'output-signals outputs)
+                    (hash 'program (gvector->list prg) 'position cur 'output-signals outputs)
                   )
                   (begin
                     ; (displayln (format "MOV AT POS ~a with args: ~a" cur dest))
                     (displayln (format "getting user input: ~a" (car user-input)))
-                    (vector-set! prg dest (car user-input))
+                    (my-vector-set! prg dest (car user-input))
                     (iter prg (+ cur 2) (cdr user-input) outputs))))]
            [(= opcode  OUT)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))])
@@ -123,38 +148,43 @@
            [(= opcode BRLT)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
                   [arg2 (get-param-val prg param-mode-2 (+ cur 2))]
-                  [arg3 (get-param-val prg POSITION_MODE (+ cur 3) #t)])
+                  [arg3 (get-param-val prg param-mode-3 (+ cur 3) #t)])
               (if (< arg1 arg2)
                   (begin
                     ; (displayln (format "BRLT AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 arg3))
-                    (vector-set! prg arg3 1)
+                    (my-vector-set! prg arg3 1)
                     (iter prg (+ cur 4) user-input outputs))
                   (begin
                     ; (displayln (format "BRLT AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 arg3))
-                    (vector-set! prg arg3 0)
+                    (my-vector-set! prg arg3 0)
                     (iter prg (+ cur 4) user-input outputs))))]
            [(= opcode BREQ)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
                   [arg2 (get-param-val prg param-mode-2 (+ cur 2))]
-                  [arg3 (get-param-val prg POSITION_MODE (+ cur 3) #t)])
+                  [arg3 (get-param-val prg param-mode-3 (+ cur 3) #t)])
               (if (eq? arg1 arg2)
                   (begin
                     ; (displayln (format "BREQ AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 arg3))
-                    (vector-set! prg arg3 1)
+                    (my-vector-set! prg arg3 1)
                     (iter prg (+ cur 4) user-input outputs))
                   (begin
                     ; (displayln (format "BREQ AT POS ~a with args: ~a ~a ~a" cur arg1 arg2 arg3))
-                    (vector-set! prg arg3 0)
+                    (my-vector-set! prg arg3 0)
                     (iter prg (+ cur 4) user-input outputs))))]
+           [(= opcode CBASE)
+            (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))])
+              (set! RELATIVE_BASE (+ RELATIVE_BASE arg1))
+              (iter prg (+ cur 2) user-input outputs))]
            [(= opcode HALT)
-            (let ([final (car (vector->list prg))])
+            (let ([final (car (gvector->list prg))])
             (begin
               (displayln (format "HALT: ~a" final))
+              (set! RELATIVE_BASE 0)
               (cons final outputs)))]
            [else (begin
                    (displayln (format "ERROR: GOT TO ~a" cur)))]
            ))]))
-  (iter (list->vector prg) resume-from user-input '()))
+  (iter (list->gvector prg) resume-from user-input '()))
 
 (module+ main
   (eval-intcode '(1002 4 3 4 33) '(1))

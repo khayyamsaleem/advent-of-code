@@ -9,6 +9,7 @@
 
 
 (define DAY_5_INPUT "https://adventofcode.com/2019/day/5/input")
+(define DAY_9_INPUT "https://adventofcode.com/2019/day/9/input")
 
 (define (get-challenge-input url)
    (map string->number (string-split
@@ -22,9 +23,14 @@
 (module+ main
   (dotenv-load!)
   ; Part One
-  (displayln "PART ONE")
-  (eval-intcode (get-challenge-input DAY_5_INPUT) '(1))
+  ;(displayln "PART ONE")
+  ;(eval-intcode (get-challenge-input DAY_5_INPUT) '(1))
   ; Part Two
-  (displayln "PART ONE")
-  (eval-intcode (get-challenge-input DAY_5_INPUT) '(5))
+  ;(displayln "PART ONE")
+  ;(eval-intcode (get-challenge-input DAY_5_INPUT) '(5))
+  (eval-intcode (get-challenge-input DAY_9_INPUT) '(1))
+  ;(eval-intcode '(104 1125899906842624 99) '())
+  ;(eval-intcode '(1102 34915192 34915192 7 4 7 99 0) '())
+  ;(eval-intcode '(104 1125899906842624 99) '())
+  ;(eval-intcode '(109 1 204 -1 1001 100 1 100 1008 100 16 101 1006 101 0 99) '())
 )

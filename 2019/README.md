@@ -11,4 +11,5 @@ This year, I want to try using a different language every day.
 06 => php + Neo4j
 07 => lua
 08 => haskell
+09 => zsh
 ```
