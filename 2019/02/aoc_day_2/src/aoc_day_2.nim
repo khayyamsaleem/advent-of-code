@@ -29,7 +29,7 @@ proc getInputByDay(day: int): seq[int] =
   result = response.body.strip.split(',').map(parseInt)
 
 # just the standard opcode processor
-proc partOne(inp: seq[int]) : int =
+proc partOne(inp: seq[int]): int =
   var output = inp
   var i = 0
   block process:
@@ -47,7 +47,7 @@ proc partOne(inp: seq[int]) : int =
           break process
   result = output[0]
 
-proc partTwo(inp: seq[int], target: int) : int =
+proc partTwo(inp: seq[int], target: int): int =
   for noun in 1..99:
     for verb in 1..99:
       var test = inp
