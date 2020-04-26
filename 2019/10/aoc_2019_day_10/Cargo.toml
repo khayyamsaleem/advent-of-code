@@ -1,0 +1,11 @@
+[package]
+name = "aoc_2019_day_10"
+version = "0.1.0"
+authors = ["Khayyam Saleem <hello@khayyam.me>"]
+edition = "2018"
+
+[dependencies]
+dotenv_codegen = "0.15.0"
+reqwest = { version = "0.10.4", features = ["blocking", "json"] }
+nalgebra = "0.20"
+fraction = "0.6.2"
