@@ -7,7 +7,10 @@ Create `.env` file with:
 session=<aoc session cookie from browser>
 ```
 
+in the `aoc_day_2` directory
+
 ## Build
+`cd aoc_day_2`
 `nimble build`
 
 ## Run
@@ -19,6 +22,7 @@ session=<aoc session cookie from browser>
 ## Run with Docker
 
 ```bash
+cd aoc_day_2
 docker build . -t ham-aocd2
 docker run ham-aocd2
 ```
