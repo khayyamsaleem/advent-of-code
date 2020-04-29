@@ -6,6 +6,8 @@
   :dependencies [
     [org.clojure/clojure "1.10.1"]
     [org.clojure/core.match "1.0.0"]
+    [cwhitey/dotty "0.2.3"]
+    [clj-http "3.10.1"]
     ]
   :main ^:skip-aot aoc-2019-day-11.core
   :target-path "target/%s"

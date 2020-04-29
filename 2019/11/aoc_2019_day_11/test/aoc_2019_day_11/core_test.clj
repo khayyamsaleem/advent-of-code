@@ -5,7 +5,7 @@
 (deftest test-move-robot
   (testing "moving robot when orientation is up moves robot up"
     (is (=
-      (move-robot (new-robot 0 0 :UP))
+      (move-robot (new-robot))
       (new-robot 0 1 :UP {[0 0] {:color :BLACK :times-painted 0} [0 1] {:color :BLACK :times-painted 0}}))))
   (testing "moving robot when orientation is down moves robot down"
     (is (=
@@ -24,6 +24,6 @@
 (deftest test-paint-panel
   (testing "panel painted with desired color when paint called"
     (is (=
-      (paint (new-robot 0 0 :UP) :WHITE)
+      (paint (new-robot) :WHITE)
       (new-robot 0 0 :UP {[0 0] {:color :WHITE :times-painted 1}}))))
     )
