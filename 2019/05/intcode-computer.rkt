@@ -75,8 +75,6 @@
 
 (define (eval-intcode prg [user-input '()] [resume-from 0])
   (define (iter prg cur user-input outputs)
-    (displayln "running")
-    ; (displayln (format "base: ~a" RELATIVE_BASE))
     (cond
       [(empty? prg)
         (displayln "received empty program")
@@ -87,7 +85,7 @@
               [param-mode-1 (hash-ref opcode-and-param-modes "pm1")]
               [param-mode-2 (hash-ref opcode-and-param-modes "pm2")]
               [param-mode-3 (hash-ref opcode-and-param-modes "pm3")])
-         ; (displayln (format "processing opcode ~a (~a,~a,~a)" opcode param-mode-1 param-mode-2 param-mode-3))
+         (displayln (format "processing opcode ~a (~a,~a,~a)" opcode param-mode-1 param-mode-2 param-mode-3))
          (cond
            [(= opcode PLUS)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))]
@@ -123,7 +121,7 @@
                     (displayln (format "getting user input: ~a" (car user-input)))
                     (my-vector-set! prg dest (car user-input))
                     (iter prg (+ cur 2) (cdr user-input) outputs))))]
-           [(= opcode  OUT)
+           [(= opcode OUT)
             (let ([arg1 (get-param-val prg param-mode-1 (+ cur 1))])
               (begin
                 (displayln (format "DIAGNOSTIC CODE: ~a" arg1))

@@ -8,6 +8,7 @@
     [org.clojure/core.match "1.0.0"]
     [cwhitey/dotty "0.2.3"]
     [clj-http "3.10.1"]
+    [cheshire "5.10.0"]
     ]
   :main ^:skip-aot aoc-2019-day-11.core
   :target-path "target/%s"

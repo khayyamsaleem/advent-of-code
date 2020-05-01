@@ -1,44 +1,58 @@
 (ns aoc-2019-day-11.core
   (:gen-class)
-  (:require [clojure.core.match :refer [match]]))
+  (:require [clojure.core.match :refer [match]]
+            [aoc-2019-day-11.intcode-service :refer [new-intcode-client eval-intcode]]
+            [aoc-2019-day-11.input-fetcher :refer [get-puzzle-input]]
+            [aoc-2019-day-11.robot :refer :all]))
 
-(defn visit-panel [r]
-  (assoc r :panels
-    (update
-      (:panels r)
-      [(:x r) (:y r)]
-      #(if (nil? %) {:color :BLACK :times-painted 0} %))))
+(defn run-paint-program [r intcode-client prg program-counter inputs]
+  (let [response (eval-intcode intcode-client prg program-counter inputs)]
+    (match [(get response "blocked") (get response "output-signals")]
+      [true [x y]] 
+        (do
+          ;; (println (get response "output-signals"))
+          ;; (println (get response "program-counter"))
+          (let [next (move-robot (point
+                      (paint-panel r (if (= x 0) :BLACK :WHITE))
+                      (if (= y 0)
+                        (left r)
+                        (right r))))]
+            (do
+              ;; (println next)
+              (recur
+                next
+                intcode-client
+                (get response "program")
+                (get response "program-counter")
+                [(match [(get-current-panel-color next)]
+                  [:BLACK] 0
+                  [:WHITE] 1
+                  [_] (throw (Exception. "Bad panel color")))]))))
+      [nil [x y]]
+        (move-robot (point
+          (paint-panel r (if (= x 0) :BLACK :WHITE))
+          (if (= y 0)
+            (left r)
+            (right r))))
+      [nil []] r
+      [_ _] (throw (Exception. "Bad response")))))
 
-(defn move-robot [r] 
-  (match [(:orientation r)]
-    [:UP] 
-      (visit-panel (update r :y inc))
-    [:DOWN]
-      (visit-panel (update r :y dec))
-    [:LEFT]
-      (visit-panel (update r :x dec))
-    [:RIGHT]
-      (visit-panel (update r :x inc))))
-
-(defn point [r new_orientation] (assoc r :orientation new_orientation))
-
-(defn paint [r color]
-  (assoc r :panels
-    (update
-      (:panels r)
-      [(:x r) (:y r)] 
-      #(assoc {} :color color :times-painted (inc (:times-painted %))))))
-
-(defn new-robot
-  ([]
-    (new-robot 0 0 :UP))
-  ([x y orientation]
-    (new-robot x y orientation {[x y] {:color :BLACK :times-painted 0}}))
-  ([x y orientation panels]
-    {:x x :y y :orientation orientation :panels panels}))
-
+(defn part-one []
+  (let [r (run-paint-program
+    (new-robot)
+    (new-intcode-client "http://intcode.docker.localhost")
+    (get-puzzle-input "https://adventofcode.com/2019/day/11/input")
+    0
+    [0])] (do
+      ;; (println r)
+      (println (count (filter #(> (:times-painted %) 0) (vals (:panels r)))))
+      r
+    )))
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (println "Hello, World!"))
+  (part-one))
+  
+
+
