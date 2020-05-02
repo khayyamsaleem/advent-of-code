@@ -53,3 +53,11 @@
     (new-robot x y orientation {[x y] {:color :BLACK :times-painted 0}}))
   ([x y orientation panels]
     {:x x :y y :orientation orientation :panels panels}))
+
+(defn new-robot-start-white
+  ([]
+    (new-robot-start-white 0 0 :UP))
+  ([x y orientation]
+    (new-robot-start-white x y orientation {[x y] {:color :WHITE :times-painted 0}}))
+  ([x y orientation panels]
+    {:x x :y y :orientation orientation :panels panels}))

@@ -38,3 +38,4 @@ cargo run
 
     This is the greatest shame of my programming career.
 
+![Advent of Code 2019 Day 10 Notes](./aoc-2019-day-10-notes.jpg)

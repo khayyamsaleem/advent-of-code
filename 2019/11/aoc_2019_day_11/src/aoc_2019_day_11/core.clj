@@ -49,10 +49,26 @@
       r
     )))
 
+(defn part-two []
+  (let [r (run-paint-program
+    (new-robot-start-white)
+    (new-intcode-client "http://intcode.docker.localhost")
+    (get-puzzle-input "https://adventofcode.com/2019/day/11/input")
+    0
+    [1])]
+      (let
+        [ minx (apply min (map first (keys (:panels r))))
+          maxx (apply max (map first (keys (:panels r))))
+          maxy (* -1 (apply min (map second (keys (:panels r)))))
+          miny (apply max (map second (keys (:panels r))))
+          grid (apply map vector (partition (inc maxy) (map #(if (= :WHITE %) "#" " ") (for [x (range (inc maxx)) y (range (inc maxy))] (:color (get (:panels r) [x (* -1 y)]))))))
+          ]
+        (println (clojure.string/join "\n" (map #(clojure.string/join "" %) grid)))
+    )))
+
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Runs all parts"
   [& args]
-  (part-one))
-  
-
-
+  (doall
+    (part-one)
+    (part-two)))
