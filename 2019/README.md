@@ -13,4 +13,5 @@ This year, I want to try using a different language every day.
 08 => haskell
 09 => zsh
 10 => rust
+11 => clojure
 ```
