@@ -25,7 +25,7 @@ pipeline {
             sh 'DOCKER_CLI_EXPERIMENTAL=enabled docker buildx rm builder || true'
             sh 'DOCKER_CLI_EXPERIMENTAL=enabled docker buildx create --name builder --driver docker-container --use'
             sh 'DOCKER_CLI_EXPERIMENTAL=enabled docker buildx inspect --bootstrap'
-            sh 'DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build ./2019/05/ -f ./2019/05/Dockerfile.arm --platform linux/arm/v7 -t registry.gitlab.com/khayyamsaleem/advent-of-code:intcode-service --load'
+            sh 'DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build ./2019/05/ -f ./2019/05/Dockerfile.arm --platform linux/arm -t registry.gitlab.com/khayyamsaleem/advent-of-code:intcode-service --load'
             sh 'docker push registry.gitlab.com/khayyamsaleem/advent-of-code:intcode-service'
           } else {
             echo 'Don\'t have a dev server yet, so just go ahead and push'
@@ -39,7 +39,6 @@ pipeline {
       script {
         if (BRANCH_NAME == 'master'){
           echo 'no images currently built'
-          sh 'docker-compose up --build -d'
           setBuildStatus("Build succeeded", "SUCCESS");
         } else {
           echo 'Something is wrong with develop???'
