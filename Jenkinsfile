@@ -20,15 +20,14 @@ pipeline {
         checkout scm
         script {
           sh("docker login -u $GITLAB_REGISTRY_CREDS_USR -p $GITLAB_REGISTRY_CREDS_PSW registry.gitlab.com")
-          sh 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'
           if (BRANCH_NAME == "master") {
-                sh 'docker build ./2019/05/ -t registry.gitlab.com/khayyamsaleem/advent-of-code:intcode'
-                sh 'docker push registry.gitlab.com/khayyamsaleem/advent-of-code:intcode'
-                sh 'docker stop $(docker ps -a | grep advent-of-code | awk \'{ print $1 }\') || true'
-                sh 'docker rm $(docker ps -a | grep advent-of-code | awk \'{ print $1 }\') || true'
-                sh 'docker rmi $(docker images | grep advent-of-code | awk \'{ print $3 }\') || true'
-                sh 'docker-compose -f ./2019/05/docker-compose-prod.yml up --build -d'
-                echo 'successfully deployed'
+            sh 'docker build ./2019/05/ -t registry.gitlab.com/khayyamsaleem/advent-of-code:intcode'
+            sh 'docker push registry.gitlab.com/khayyamsaleem/advent-of-code:intcode'
+            sh 'docker stop $(docker ps -a | grep advent-of-code | awk \'{ print $1 }\') || true'
+            sh 'docker rm $(docker ps -a | grep advent-of-code | awk \'{ print $1 }\') || true'
+            sh 'docker rmi $(docker images | grep advent-of-code | awk \'{ print $3 }\') || true'
+            sh 'docker-compose -f ./2019/05/docker-compose-prod.yml up --build -d'
+            echo 'successfully deployed'
           } else {
             echo 'Don\'t have a dev server yet, so just go ahead and push'
           }
