@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+    intcode_server:
+        image: hamthewhale/aoc_intcode_server
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:1337/"]
+            interval: 1s
+            timeout: 10s
+            retries: 3
+        deploy:
+            mode: replicated
+            replicas: 6
+    day13:
+        build: .
+        depends_on:
+            - intcode_server
