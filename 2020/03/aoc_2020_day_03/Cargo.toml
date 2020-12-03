@@ -1,0 +1,14 @@
+[package]
+name = "aoc_2020_day_03"
+version = "0.1.0"
+authors = ["Khayyam Saleem <hello@khayyam.me>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+futures = "0.3.8"
+dotenv = "0.15.0"
+reqwest = "0.10.9"
+mockito = "0.28.0"
+tokio = { version = "0.2.5", features = ["full"] }
