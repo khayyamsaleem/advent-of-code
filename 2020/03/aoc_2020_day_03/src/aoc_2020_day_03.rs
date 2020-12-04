@@ -87,7 +87,7 @@ mod tests {
         ).create();
 
         let test_input = get_input(&Client::new(), "token", 2020, 1).await?;
-        assert_eq!(count_trees(test_input, 3, 1), 7);
+        assert_eq!(count_trees(&test_input, 3, 1), 7);
 
         Ok(())
     }
