@@ -1,5 +1,5 @@
 [package]
-name = "aoc_2020_day_01"
+name = "aoc_2020"
 version = "0.1.0"
 authors = ["Khayyam Saleem <hello@khayyam.me>"]
 edition = "2018"
@@ -11,4 +11,6 @@ futures = "0.3.8"
 dotenv = "0.15.0"
 reqwest = "0.10.9"
 mockito = "0.28.0"
+regex = "1.1.9"
 tokio = { version = "0.2.5", features = ["full"] }
+maplit = "1.0.2"

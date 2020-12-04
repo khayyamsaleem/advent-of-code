@@ -1,17 +1,22 @@
-use reqwest::{ Error, header::{ COOKIE } };
 use regex::Regex;
+use dotenv;
+use reqwest::{
+    Error,
+    Client,
+    header::{ COOKIE }
+};
 
 #[cfg(test)]
 use mockito;
 
 #[derive(Debug)]
-pub struct Policy {
+struct Policy {
     character: char,
     min: usize,
     max: usize,
 }
 
-pub async fn get_input(
+async fn get_input(
     client: &reqwest::Client,
     token: &str,
     year: i64,
@@ -45,16 +50,26 @@ fn line_to_policy_pair(line: &str) -> (Policy, String) {
     }
 }
 
-pub fn test_policy_one(p: &Policy, s: &String) -> bool {
+fn test_policy_one(p: &Policy, s: &String) -> bool {
     let count = s.chars().filter(|x| *x == p.character).count();
     count >= p.min && count <= p.max
 }
 
-pub fn test_policy_two(p: &Policy, s: &String) -> bool {
+fn test_policy_two(p: &Policy, s: &String) -> bool {
     let at_min = s.chars().nth(p.min-1).unwrap();
     let at_max = s.chars().nth(p.max-1).unwrap();
     (at_min == p.character) ^ (at_max == p.character)
 }
+
+
+pub async fn solve() -> Result<(), Error> {
+    dotenv::dotenv().ok();
+    let res = get_input(&Client::new(), &std::env::var("session").unwrap(), 2020, 2).await?;
+    println!("DAY 02 Part 1: {:?}", res.iter().filter(|t| test_policy_one(&t.0, &t.1)).count());
+    println!("DAY 02 Part 2: {:?}", res.iter().filter(|t| test_policy_two(&t.0, &t.1)).count());
+    Ok(())
+}
+
 
 
 #[cfg(test)]

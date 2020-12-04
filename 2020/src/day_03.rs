@@ -1,10 +1,23 @@
-use reqwest::{ Error, header::{ COOKIE } };
-
+use reqwest::{
+    Error,
+    Client,
+    header::{ COOKIE }
+};
 
 #[cfg(test)]
 use mockito;
 
-pub async fn get_input(
+const SLOPE_PART_1 : (i64, i64) = (3, 1);
+
+const SLOPES_PART_2 : [(i64, i64); 5]= [
+    (1, 1),
+    (3, 1),
+    (5, 1),
+    (7, 1),
+    (1, 2)
+];
+
+async fn get_input(
     client: &reqwest::Client,
     token: &str,
     year: i64,
@@ -24,7 +37,7 @@ pub async fn get_input(
     Ok(res.trim().split("\n").map(|s| s.chars().collect()).collect::<Vec<Vec<char>>>())
 }
 
-pub fn count_trees(map: &Vec<Vec<char>>, right_jump: i64, down_jump: i64) -> i64 {
+fn count_trees(map: &Vec<Vec<char>>, right_jump: i64, down_jump: i64) -> i64 {
     const TREE: char = '#';
     let height = map.len();
     let mut num_trees = 0;
@@ -35,6 +48,19 @@ pub fn count_trees(map: &Vec<Vec<char>>, right_jump: i64, down_jump: i64) -> i64
         y_pos += down_jump as usize;
     }
     return num_trees;
+}
+
+pub async fn solve() -> Result<(), Error> {
+
+    dotenv::dotenv().ok();
+    let res = get_input(&Client::new(), &std::env::var("session").unwrap(), 2020, 3).await?;
+    let ( right_jump, down_jump ) = SLOPE_PART_1;
+    println!("Day 03 Part 1: {:?}", count_trees(&res, right_jump, down_jump));
+    println!("Day 03 Part 2: {:?}", SLOPES_PART_2.iter().map(|slope| {
+        let (right_jump, down_jump) = slope;
+        count_trees(&res, *right_jump, *down_jump)
+    }).fold(1, |x,y| x*y));
+    Ok(())
 }
 
 
