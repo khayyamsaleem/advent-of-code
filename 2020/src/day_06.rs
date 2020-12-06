@@ -21,7 +21,7 @@ fn count_sum_for_questions_per_group(groups: &Vec<Vec<&str>>) -> i64 {
 fn count_sum_for_all_answered_per_group(groups: &Vec<Vec<&str>>) -> i64 {
     groups.iter().map(|group| {
         let people : Vec<HashSet<char>> = group.iter().map(|q| HashSet::from_iter(q.chars())).collect();
-        people.iter().next().unwrap().iter().filter(|q| people.iter().all(|questions| questions.contains(q))).count() as i64
+        people.first().unwrap().iter().filter(|q| people.iter().all(|questions| questions.contains(q))).count() as i64
     }).sum()
 }
 
@@ -34,7 +34,7 @@ pub async fn solve() -> Result<(), Error> {
 }
 
 #[cfg(test)]
-mod tests{
+mod tests {
     use super::*;
     use crate::common;
     use mockito::{self, mock};

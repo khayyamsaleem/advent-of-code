@@ -1,3 +1,4 @@
+#![feature(iterator_fold_self)]
 mod common;
 #[macro_use] extern crate maplit;
 pub mod day_01;
