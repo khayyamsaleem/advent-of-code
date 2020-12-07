@@ -13,7 +13,7 @@ fn add_or_get_node(g: &mut Graph<String, u64>, node_name: String) -> NodeIndex {
     }
 }
 
-fn create_tree_from_input(input: String) -> Graph<String, u64> {
+fn create_trees_from_input(input: String) -> Graph<String, u64> {
     input.trim().split('\n').fold(Graph::new(), |mut acc, cur| {
         let mut iter = cur.split(" ");
         let bag_name = iter.next().unwrap().to_owned() + " " + iter.next().unwrap(); //shade, color
@@ -66,7 +66,7 @@ fn count_bag_capacity(bag_name: &str, g: &Graph<String, u64>, init_weight: u64) 
 }
 
 pub async fn solve() -> Result<(), Error> {
-    let g = create_tree_from_input(common::get_input(2020, 7).await?);
+    let g = create_trees_from_input(common::get_input(2020, 7).await?);
     println!(
         "Day 07 Part 1: {:?}",
         g.node_indices()
@@ -104,7 +104,7 @@ dotted black bags contain no other bags.
 ",
             )
             .create();
-        let g = create_tree_from_input(common::get_input(2020, 7).await?);
+        let g = create_trees_from_input(common::get_input(2020, 7).await?);
         assert_eq!(g.node_count(), 9);
         assert_eq!(count_bag_capacity(BAG_TO_FIND, &g, 1) - 1, 32);
         Ok(())
@@ -119,7 +119,7 @@ dark yellow bags contain 2 dark green bags.
 dark green bags contain 2 dark blue bags.
 dark blue bags contain 2 dark violet bags.
 dark violet bags contain no other bags.";
-        let g = create_tree_from_input(input.to_string());
+        let g = create_trees_from_input(input.to_string());
         assert_eq!(count_bag_capacity(BAG_TO_FIND, &g, 1) - 1, 126);
     }
 }
