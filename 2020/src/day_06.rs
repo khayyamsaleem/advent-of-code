@@ -11,14 +11,14 @@ fn parse_groups_from_input(input: &str) -> Vec<Vec<&str>> {
         .collect()
 }
 
-fn count_sum_for_questions_per_group(groups: &Vec<Vec<&str>>) -> i64 {
+fn count_sum_for_questions_per_group(groups: &Vec<Vec<&str>>) -> u64 {
     groups
         .iter()
-        .map(|group| -> i64 { HashSet::<char>::from_iter(group.join("").chars()).len() as i64 })
-        .sum::<i64>()
+        .map(|group| HashSet::<char>::from_iter(group.join("").chars()).len() as u64)
+        .sum()
 }
 
-fn count_sum_for_all_answered_per_group(groups: &Vec<Vec<&str>>) -> i64 {
+fn count_sum_for_all_answered_per_group(groups: &Vec<Vec<&str>>) -> u64 {
     groups
         .iter()
         .map(|group| {
@@ -31,7 +31,7 @@ fn count_sum_for_all_answered_per_group(groups: &Vec<Vec<&str>>) -> i64 {
                 .unwrap()
                 .iter()
                 .filter(|q| people.iter().all(|questions| questions.contains(q)))
-                .count() as i64
+                .count() as u64
         })
         .sum()
 }
