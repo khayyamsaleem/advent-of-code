@@ -47,14 +47,14 @@ fn eval_instructions_if_terminates(instructions: &Vec<(&str, i64)>) -> Result<i6
     while !visited.contains(&cur) && cur < instructions.len() {
         visited.push(cur);
         match instructions[cur] {
-            ("nop", _x) => {
+            (NOP, _x) => {
                 cur += 1;
             }
-            ("acc", x) => {
+            (ACC, x) => {
                 acc += x;
                 cur += 1;
             }
-            ("jmp", x) => cur = (cur as i64 + x) as usize,
+            (JMP, x) => cur = (cur as i64 + x) as usize,
             (i, _x) => panic!("No such instruction: {}", i),
         }
     }
