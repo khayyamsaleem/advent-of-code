@@ -12,6 +12,7 @@ async fn main() -> Result<(), Error> {
     aoc_2020::day_07::solve().await?;
     aoc_2020::day_08::solve().await?;
     aoc_2020::day_09::solve().await?;
+    aoc_2020::day_10::solve().await?;
 
     Ok(())
 }
