@@ -37,7 +37,7 @@ fn count_adapter_arrangements(adapters: &mut Vec<u64>) -> u64 {
         adapters: Vec<u64>,
         length: usize,
         seen: HashMap<usize, u64>,
-    };
+    }
     fn count(pos: usize, ctx: &mut Ctx) -> u64 {
         if pos == ctx.length - 1 {
             return 1;
@@ -54,7 +54,7 @@ fn count_adapter_arrangements(adapters: &mut Vec<u64>) -> u64 {
         }
         ctx.seen.insert(pos, arrangements);
         arrangements
-    };
+    }
     count(
         0,
         &mut Ctx {

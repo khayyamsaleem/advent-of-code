@@ -1,5 +1,4 @@
 use crate::common;
-use itertools::Itertools;
 use petgraph::prelude::{Graph, NodeIndex};
 use reqwest::Error;
 
@@ -20,8 +19,7 @@ fn create_trees_from_input(input: String) -> Graph<String, u64> {
         let parent = add_or_get_node(&mut acc, bag_name);
 
         //skipping "bags contain"
-        iter.skip(2)
-            .intersperse(" ")
+        itertools::Itertools::intersperse(iter.skip(2), " ")
             .collect::<String>()
             .split(", ")
             .for_each(|bag_exp| {
