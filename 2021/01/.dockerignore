@@ -1,0 +1,7 @@
+lua
+luarocks
+.luarocks
+luacov.stats.out
+lua_modules
+.vscode
+Dockerfile
