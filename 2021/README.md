@@ -1,6 +1,4 @@
-# AoC 2021 -- Lua
-
-![https://upload.wikimedia.org/wikipedia/commons/c/cf/Lua-Logo.svg]
+# AoC 2021 -- Lua ![Lua logo](https://upload.wikimedia.org/wikipedia/commons/c/cf/Lua-Logo.svg)
 
 ## Prerequisites
 Create a `.env` file:
