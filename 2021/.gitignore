@@ -1,6 +1,12 @@
+/luarocks
+/lua
+/lua_modules
+/.luarocks
 
-# Created by https://www.toptal.com/developers/gitignore/api/lua,macos,visualstudiocode,vim
-# Edit at https://www.toptal.com/developers/gitignore?templates=lua,macos,visualstudiocode,vim
+
+
+# Created by https://www.toptal.com/developers/gitignore/api/lua,vim,macos,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=lua,vim,macos,visualstudiocode
 
 ### Lua ###
 # Compiled Lua sources
@@ -114,4 +120,4 @@ tags
 # Support for Project snippet scope
 !.vscode/*.code-snippets
 
-# End of https://www.toptal.com/developers/gitignore/api/lua,macos,visualstudiocode,vim
+# End of https://www.toptal.com/developers/gitignore/api/lua,vim,macos,visualstudiocode

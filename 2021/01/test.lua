@@ -1,5 +1,5 @@
 require 'busted.runner'()
-local solution = require "01"
+local solution = require "01.solution"
 
 local test_input = [[199
 200

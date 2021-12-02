@@ -1,6 +1,7 @@
-local aoc = require "aoc_lib";
-local solution = require "01";
+local aoc = require "aoc";
 local dotenv = require "dotenv";
+
+local solution = require "01.solution";
 
 local env = dotenv.load()
 

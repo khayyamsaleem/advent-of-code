@@ -1,5 +1,4 @@
 local fun = require "fun"
-local inspect = require "inspect"
 
 local solution = {}
 
