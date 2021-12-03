@@ -1,6 +1,5 @@
 require 'busted.runner'()
 local fun = require "fun"
-local inspect = require "inspect"
 
 local solution = require "02.solution"
 

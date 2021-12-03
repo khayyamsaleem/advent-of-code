@@ -1,11 +1,8 @@
 local aoc = require "aoc";
-local dotenv = require "dotenv";
-
 local solution = require "01.solution";
 
-local env = dotenv.load()
 
-local input = aoc.get_input("https://adventofcode.com/2021/day/1/input", env["session"])
+local input = aoc.get_input(1)
 
 local window_length = 3
 
