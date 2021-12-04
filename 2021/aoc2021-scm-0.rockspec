@@ -16,6 +16,8 @@ dependencies = {
    "busted";
    "luacov";
    "luafilesystem";
+   "moonscript";
+   "moonpick";
 }
 build = {
    type = "builtin",

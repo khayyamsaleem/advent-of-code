@@ -1,4 +1,5 @@
 require "set_paths"
+require "moonscript"
 local lfs = require "lfs";
 
 local day = arg[1]
