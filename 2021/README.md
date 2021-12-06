@@ -12,20 +12,19 @@ session=<advent-of-code-session-token>
 ## Running with Podman
 ```bash
 podman build . -t hamthewhale/aoc-2021-lua
-podman run --rm hamthewhale/aoc-2021-lua
+podman run --rm -it hamthewhale/aoc-2021-lua sh
 ```
 
 ## Running on macOS
 ```bash
 brew install luarocks openssl@1.1
 luarocks init
-./luarocks install --tree lua_modules --only-deps aoc2021-dev-01.rockspec OPENSSL_DIR=/usr/local/opt/openssl@1.1/ CRYPTO_DIR=/usr/local/opt/openssl@1.1/ --local
+./luarocks install --tree lua_modules --only-deps aoc2021-scm-0.rockspec OPENSSL_DIR=/usr/local/opt/openssl@1.1/ CRYPTO_DIR=/usr/local/opt/openssl@1.1/ --local
 
 ./lua run.lua <day>
 ```
 
 ## Running Tests
 ```bash
-./lua -l set_paths 01/test.lua
-./lua -l set_paths 02/test.lua
+./lua test.lua <day>
 ```
