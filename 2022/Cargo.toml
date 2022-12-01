@@ -1,0 +1,13 @@
+[package]
+name = "aoc_2022"
+version = "0.1.0"
+authors = ["Khayyam Saleem <hello@khayyam.me>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.22.0", features = ["full"] }
+mockito = "0.31.0"
+reqwest = "0.11.13"
+dotenv = "0.15.0"
