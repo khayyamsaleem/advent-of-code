@@ -1,42 +1,41 @@
 use std::collections::BinaryHeap;
+use std::collections::binary_heap::IntoIterSorted;
 
 use reqwest::Error;
 
 use crate::common;
 
-fn parse_elf_meal_totals(input: &str) -> impl Iterator<Item=i64> + '_ {
-    input
-        .trim()
-        .split("\n\n")
-        .map(
-            |elf_foods|
-            elf_foods.trim()
-                .split("\n")
-                .map(|food_cals| food_cals.parse::<i64>().unwrap())
-                .sum::<i64>()
+fn build_heap_of_elf_meal_calorie_totals(input: &str) -> IntoIterSorted<i64> {
+    let mut meals: BinaryHeap<i64> = BinaryHeap::new();
+    for meal in input.trim().split("\n\n") {
+        meals.push(
+            meal.trim().split("\n")
+            .map(|food_cals| food_cals.parse::<i64>().unwrap())
+            .sum::<i64>()
         )
+    }
+    meals.into_iter_sorted()
 }
 
-fn get_max_cal_count_for_elves(input: &str) -> i64 {
-    parse_elf_meal_totals(input)
-        .max()
-        .unwrap()
-
-}
-
-fn get_total_cals_for_top_n_elves(input: &str, n: usize) -> i64 {
-    BinaryHeap::from_iter(parse_elf_meal_totals(input)).into_iter_sorted().take(n).sum()
+fn get_total_cals_for_top_n_elves(
+    meals: &mut IntoIterSorted<i64>,
+    n: usize
+) -> i64 {
+    meals.take(n).sum()
 }
 
 pub async fn solve() -> Result<(), Error> {
     let input = common::get_input(2022, 1).await?;
+    let mut heap = build_heap_of_elf_meal_calorie_totals(&input);
+    let max_cal_meal = get_total_cals_for_top_n_elves(&mut heap, 1);
     println!(
         "Day 01 Part 1: {:?}",
-        get_max_cal_count_for_elves(&input)
+        max_cal_meal
     );
     println!(
         "Day 01 Part 2: {:?}",
-        get_total_cals_for_top_n_elves(&input, 3)
+        max_cal_meal + get_total_cals_for_top_n_elves(&mut heap, 2)
+        // because the first was already consumed in part 1
     );
     Ok(())
 }
@@ -64,13 +63,9 @@ mod tests {
 ";
 
     #[test]
-    fn test_get_max_cal_count_for_elves() {
-        assert_eq!(get_max_cal_count_for_elves(TEST_INPUT), 24000);
-    }
-
-    #[test]
     fn test_get_total_cals_for_top_n_elves() {
-        assert_eq!(get_total_cals_for_top_n_elves(TEST_INPUT, 3), 45000);
+        let mut heap = build_heap_of_elf_meal_calorie_totals(&TEST_INPUT);
+        assert_eq!(get_total_cals_for_top_n_elves(&mut heap, 3), 45000);
     }
 
 }
