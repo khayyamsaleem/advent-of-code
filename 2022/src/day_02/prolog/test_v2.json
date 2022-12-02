@@ -1,0 +1,11 @@
+[
+    [
+        "rock","draw"
+    ],
+    [
+        "paper","lose"
+    ],
+    [
+        "scissors","win"
+    ]
+]
