@@ -9,9 +9,11 @@ fn build_heap_of_elf_meal_calorie_totals(input: &str) -> IntoIterSorted<i64> {
     let mut meals: BinaryHeap<i64> = BinaryHeap::new();
     for meal in input.trim().split("\n\n") {
         meals.push(
-            meal.trim().split("\n")
-            .map(|food_cals| food_cals.parse::<i64>().unwrap())
-            .sum::<i64>()
+            meal
+                .trim()
+                .split("\n")
+                .map(|food_cals| food_cals.parse::<i64>().unwrap())
+                .sum::<i64>()
         )
     }
     meals.into_iter_sorted()
