@@ -24,29 +24,27 @@ fn to_goal(e: &str) -> &str {
     }
 }
 
-fn game_from_input(input: &str) -> Vec<(&str,&str)> {
-    input.trim().split("\n")
-        .map(
-            |round|
-            match round.split(" ").next_tuple().unwrap() {
-                (they, me) => (to_shape(they), to_shape(me)),
-            }
-        )
+fn game_from_input(input: &str) -> Vec<(&str, &str)> {
+    input
+        .trim()
+        .split("\n")
+        .map(|round| match round.split(" ").next_tuple().unwrap() {
+            (they, me) => (to_shape(they), to_shape(me)),
+        })
         .collect()
 }
 
-fn game_from_input_clarified(input: &str) -> Vec<(&str,&str)> {
-    input.trim().split("\n")
-        .map(
-            |round|
-            match round.split(" ").next_tuple().unwrap() {
-                (they, g) => (to_shape(they), to_goal(g)),
-            }
-        )
+fn game_from_input_clarified(input: &str) -> Vec<(&str, &str)> {
+    input
+        .trim()
+        .split("\n")
+        .map(|round| match round.split(" ").next_tuple().unwrap() {
+            (they, g) => (to_shape(they), to_goal(g)),
+        })
         .collect()
 }
 
-async fn solve_with_prolog(game: &Vec<(&str,&str)>, strategy: &str) -> Result<i64,Error> {
+async fn solve_with_prolog(game: &Vec<(&str, &str)>, strategy: &str) -> Result<i64, Error> {
     #[cfg(not(test))]
     let base_url = "http://localhost:42069";
     #[cfg(test)]
@@ -63,7 +61,6 @@ async fn solve_with_prolog(game: &Vec<(&str,&str)>, strategy: &str) -> Result<i6
         .unwrap())
 }
 
-
 pub async fn solve() -> Result<(), Error> {
     let input = common::get_input(2022, 2).await?;
     println!(
@@ -77,12 +74,11 @@ pub async fn solve() -> Result<(), Error> {
     Ok(())
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    const TEST_INPUT : &str = "
+    const TEST_INPUT: &str = "
 A Y
 B X
 C Z
@@ -92,7 +88,11 @@ C Z
     fn test_game_from_input() {
         assert_eq!(
             game_from_input(TEST_INPUT),
-            vec![("rock","paper"),("paper","rock"), ("scissors","scissors")]
+            vec![
+                ("rock", "paper"),
+                ("paper", "rock"),
+                ("scissors", "scissors")
+            ]
         )
     }
 
@@ -100,8 +100,7 @@ C Z
     fn test_game_from_input_clarified() {
         assert_eq!(
             game_from_input_clarified(TEST_INPUT),
-            vec![("rock","draw"),("paper","lose"),("scissors","win")]
+            vec![("rock", "draw"), ("paper", "lose"), ("scissors", "win")]
         )
     }
-
 }
