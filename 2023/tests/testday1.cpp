@@ -9,6 +9,11 @@ TEST(Day1, Part1)
   EXPECT_EQ(day1::get_two_digit_number("treb7uchet"), 77);
 
   EXPECT_EQ(day1::solve_part1("1abc2\npqr3stu8vwx\na1b2c3d4e5f\ntreb7uchet"), 142);
+
+  EXPECT_EQ(day1::get_two_digit_number_2("two1nine"), 29);
+  EXPECT_EQ(day1::get_two_digit_number_2("eighttwothree"), 83);
+  EXPECT_EQ(day1::get_two_digit_number_2("abcone2threexyz"), 13);
+  EXPECT_EQ(day1::get_two_digit_number_2("xtwone3four"), 24);
 }
 
 int main(int argc, char **argv)
