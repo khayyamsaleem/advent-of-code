@@ -7,6 +7,8 @@ struct State {
     x: i64,
 }
 
+const CRT_WIDTH: i64 = 40;
+
 fn run_instructions(initial_state: State, instructions: &str) -> Vec<State> {
     instructions.trim().split("\n").into_iter().fold(vec![initial_state], |mut acc, instruction| {
         let prev_state = acc.last().unwrap();
@@ -34,12 +36,35 @@ pub async fn solve() -> Result<(), Error> {
     let input = common::get_input(2022, 10).await?;
     let states = run_instructions(State {x: 1}, &input);
     println!("Day 10 Part 1: {:?}", get_signal_strength_sum(&states, 20, 40, 6));
+    println!("Day 10 Part 2: \n{}\n", crt_render(states));
     Ok(())
+}
+
+fn crt_render(states: Vec<State>) -> String {
+    let mut pixels = vec![];
+    let mut i: i64 = 0;
+    states.iter().for_each(|state|{
+        i = if i == CRT_WIDTH { 0 } else { i };
+        pixels.push(if state.x+1 == i || state.x-1 == i || state.x == i { '#' } else {'.'});
+        i = i + 1;
+    });
+    pixels.iter().rev().skip(1).rev().enumerate().fold("".to_string(), |acc, (i, p)|{
+        if i != 0 && i as i64 % CRT_WIDTH == 0 {
+            return acc + &format!("\n{}", p)
+        }
+        return acc + &p.to_string()
+    })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_sprite_position() {
+        let states = run_instructions(State {x: 1}, TEST_INPUT);
+        assert_eq!(crt_render(states), TEST_EXPECTED_IMAGE);
+    }
 
     #[test]
     fn test_run_instructions() {
@@ -201,4 +226,12 @@ noop
 noop
 noop
 ";
+
+        const TEST_EXPECTED_IMAGE: &str = "##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######.....";
+
 }
