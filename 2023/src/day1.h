@@ -1,0 +1,12 @@
+#ifndef DAY_1_H
+#define DAY_1_H
+
+#include <string>
+
+namespace day1
+{
+  int solve_part1(std::string input);
+  int get_two_digit_number(std::string s);
+}
+
+#endif // DAY_1_H

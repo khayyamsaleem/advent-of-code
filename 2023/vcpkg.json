@@ -1,0 +1,8 @@
+{
+  "name": "advent-of-code-2023",
+  "version-string": "1.0.0",
+  "dependencies": [
+    "curl",
+    "gtest"
+  ]
+}
