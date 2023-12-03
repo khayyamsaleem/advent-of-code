@@ -9,5 +9,6 @@ int main()
   auto &dotenv = dotenv::env.load_dotenv();
 
   std::cout << "2023 Day 1 Part 1: " << day1::solve_part1(get_input(dotenv["SESSION"], 2023, 1)) << std::endl;
+  std::cout << "2023 Day 1 Part 2: " << day1::solve_part2(get_input(dotenv["SESSION"], 2023, 1)) << std::endl;
   return 0;
 }

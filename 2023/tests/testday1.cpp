@@ -14,6 +14,16 @@ TEST(Day1, Part1)
   EXPECT_EQ(day1::get_two_digit_number_2("eighttwothree"), 83);
   EXPECT_EQ(day1::get_two_digit_number_2("abcone2threexyz"), 13);
   EXPECT_EQ(day1::get_two_digit_number_2("xtwone3four"), 24);
+
+  EXPECT_EQ(day1::solve_part2(R"(two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen
+)"), 281);
+
 }
 
 int main(int argc, char **argv)
