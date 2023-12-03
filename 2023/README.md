@@ -2,23 +2,42 @@
 
 In which I find out just how far behind the dev experience is for C++ in 2023.
 
+## Setup
+
+Install [vcpkg](https://vcpkg.io/en/getting-started) and CMake.
+
+
+```bash
+git clone https://github.com/Microsoft/vcpkg.git $HOME/.vcpkg
+```
+
+Configure the vcpkg-managed dependencies:
+
+```bash
+$HOME/.vcpkg/vcpkg install
+```
+
+## Build 
+
+```bash
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$HOME/.vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake --build build
+```
 
 ## Run
 
+Create a `.env` file in the root of the repo with contents:
+
+```text
+SESSION=<advent of code session token>
+```
+
 ```bash
-mkdir -p build
-cd build
-cmake ..
-cmake --build .
-./src/aoc2023
+./build/src/aoc2023
 ```
 
 ## Test
 
 ```bash
-mkdir -p build
-cd build
-cmake ..
-cmake --build .
-./tests/test_runner
+./build/tests/test_runner
 ```
