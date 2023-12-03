@@ -5,8 +5,11 @@
 #include <map>
 #include <vector>
 
-namespace day1 {
+#include "puzzle_registry.h"
 
+namespace aoc {
+class Day1 : public Puzzle {
+public:
     int get_two_digit_number_2(std::string s) {
         std::map<std::string, int> numbers = {
             {"zero", 0},
@@ -20,7 +23,6 @@ namespace day1 {
             {"eight", 8},
             {"nine", 9},
         };
-
         for (int i = 0; i < 10; i++) {
             numbers[std::to_string(i)] = i;
         }
@@ -102,5 +104,13 @@ namespace day1 {
         }
         return sum;
     }
+
+    void solve(std::string input) override {
+        std::cout << "2023 Day 1 Part 1: " << solve_part1(input) << std::endl;
+        std::cout << "2023 Day 1 Part 2: " << solve_part2(input) << std::endl;
+    }
+};
+
+REGISTER_PUZZLE(1, Day1)
 
 }

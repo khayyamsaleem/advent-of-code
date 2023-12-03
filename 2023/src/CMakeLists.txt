@@ -12,10 +12,12 @@ if(NOT dotenv_POPULATED)
 endif()
 add_subdirectory(${dotenv_SOURCE_DIR} ${dotenv_BINARY_DIR})
 
-add_library(day1_lib STATIC day1.cpp)
-target_include_directories(day1_lib PUBLIC ../lib/)
+file(GLOB PUZZLE_SOURCES "day*.cpp")
+
+add_library(puzzle_lib STATIC ${PUZZLE_SOURCES})
+target_include_directories(puzzle_lib PUBLIC ../lib/)
 
 add_executable(aoc2023 main.cpp)
 target_link_libraries(aoc2023 PRIVATE libaoc)
 target_link_libraries(aoc2023 PRIVATE cpp_dotenv)
-target_link_libraries(aoc2023 PRIVATE day1_lib)
+target_link_libraries(aoc2023 PRIVATE puzzle_lib)

@@ -2,7 +2,7 @@ find_package(GTest CONFIG REQUIRED)
 enable_testing()
 
 add_executable(test_runner
-  testday1.cpp
+  test.cpp
 )
 
 target_include_directories(
@@ -16,7 +16,7 @@ target_link_libraries(
   PRIVATE
   GTest::gtest
   GTest::gtest_main
-  day1_lib
+  puzzle_lib
 )
 
 add_test(NAME all_tests COMMAND test_runner)
