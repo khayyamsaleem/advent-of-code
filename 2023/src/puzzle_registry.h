@@ -17,7 +17,8 @@ public:
 static std::unordered_map<int, PuzzleRegistryFn> make_registry() {
     return {
         {1, []() { return std::make_unique<Day1>(); }},
-        {2, []() { return std::make_unique<Day2>(); }}
+        {2, []() { return std::make_unique<Day2>(); }},
+        {3, []() { return std::make_unique<Day3>(); }}
     };
 }
 

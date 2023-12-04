@@ -88,6 +88,17 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
   EXPECT_EQ(d2->solve_part2(test_input), 2286);
 }
 
+
+TEST(Day3, Part1) {
+  auto d3 = dynamic_cast<aoc::Day3*>(registry.at(3)().get());
+  EXPECT_EQ(d3->solve_part1(""), 0);
+}
+
+TEST(Day3, Part2) {
+  auto d3 = dynamic_cast<aoc::Day3*>(registry.at(3)().get());
+  EXPECT_EQ(d3->solve_part2(""), 0);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
