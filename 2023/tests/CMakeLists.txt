@@ -16,7 +16,7 @@ target_link_libraries(
   PRIVATE
   GTest::gtest
   GTest::gtest_main
-  puzzle_lib
+  puzzle
 )
 
 add_test(NAME all_tests COMMAND test_runner)

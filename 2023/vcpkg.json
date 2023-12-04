@@ -3,6 +3,8 @@
   "version-string": "1.0.0",
   "dependencies": [
     "curl",
-    "gtest"
+    "gtest",
+    "boost-algorithm",
+    "boost-iterator"
   ]
 }

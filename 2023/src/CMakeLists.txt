@@ -13,11 +13,16 @@ endif()
 add_subdirectory(${dotenv_SOURCE_DIR} ${dotenv_BINARY_DIR})
 
 file(GLOB PUZZLE_SOURCES "day*.cpp")
+find_package(Boost REQUIRED)
 
-add_library(puzzle_lib STATIC ${PUZZLE_SOURCES})
-target_include_directories(puzzle_lib PUBLIC ../lib/)
+add_library(puzzle STATIC ${PUZZLE_SOURCES})
+target_link_libraries(puzzle PRIVATE
+  Boost::boost
+)
 
 add_executable(aoc2023 main.cpp)
-target_link_libraries(aoc2023 PRIVATE libaoc)
-target_link_libraries(aoc2023 PRIVATE cpp_dotenv)
-target_link_libraries(aoc2023 PRIVATE puzzle_lib)
+target_link_libraries(aoc2023 PRIVATE
+  libaoc
+  cpp_dotenv
+  puzzle
+)
