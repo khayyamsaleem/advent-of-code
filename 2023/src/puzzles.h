@@ -42,6 +42,13 @@ public:
   int solve_part2(std::string input);
 };
 
+class Day4 : public Puzzle {
+public:
+  void solve(std::string input) override;
+  int solve_part1(std::string input);
+  int solve_part2(std::string input);
+};
+
 }
 
 #endif // PUZZLES_H
