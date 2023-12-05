@@ -53,7 +53,6 @@ TEST(Day2, Part1) {
     {"green", 13},
     {"blue", 14}
   };
-
   EXPECT_EQ(
     g.is_possible_with_bag(bag),
     false
@@ -91,13 +90,35 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 
 TEST(Day3, Part1) {
   auto d3 = dynamic_cast<aoc::Day3*>(registry.at(3)().get());
-  EXPECT_EQ(d3->solve_part1(""), 0);
+  auto test_input = R"(467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..)";
+
+  EXPECT_EQ(d3->solve_part1(test_input), 4361);
 }
 
 TEST(Day3, Part2) {
   auto d3 = dynamic_cast<aoc::Day3*>(registry.at(3)().get());
-  EXPECT_EQ(d3->solve_part2(""), 0);
+  auto test_input = R"(467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..)";
+  EXPECT_EQ(d3->solve_part2(test_input), 467835);
 }
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
