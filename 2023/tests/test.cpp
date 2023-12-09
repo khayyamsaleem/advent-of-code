@@ -159,6 +159,20 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11)";
   EXPECT_EQ(d4->solve_part2(test_input), 30);
 }
 
+TEST(Day5, Part1) {
+  auto registry_entry = registry.at(5)();
+  auto d5 = dynamic_cast<aoc::Day5*>(registry_entry.get());
+  auto test_input = R"()";
+  EXPECT_EQ(d5->solve_part1(test_input), 0);
+}
+
+TEST(Day5, Part2) {
+  auto registry_entry = registry.at(5)();
+  auto d5 = dynamic_cast<aoc::Day5*>(registry_entry.get());
+  auto test_input = R"()";
+  EXPECT_EQ(d5->solve_part2(test_input), 0);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
