@@ -46,11 +46,11 @@ class Day4 : public Puzzle {
 public:
   struct Card {
     int id;
-    std::set<int> winningNumbers;
-    std::set<int> myNumbers;
+    std::set<int> winningNumbers, myNumbers;
 
     explicit Card(const std::string_view input);
-    int worth();
+    int worth() const;
+    int wins() const;
   };
   void solve(std::string input) override;
   int solve_part1(std::string input);

@@ -22,7 +22,8 @@ $HOME/.vcpkg/vcpkg install
 
 ```bash
 cmake -B build -S . \
-   -DCMAKE_TOOLCHAIN_FILE=$HOME/.vcpkg/scripts/buildsystems/vcpkg.cmake \ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+   -DCMAKE_TOOLCHAIN_FILE=$HOME/.vcpkg/scripts/buildsystems/vcpkg.cmake \
+   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build build
 ```
 
@@ -35,7 +36,7 @@ SESSION=<advent of code session token>
 ```
 
 ```bash
-./build/src/aoc2023
+./build/src/aoc2023 <day|"all">
 ```
 
 ## Test

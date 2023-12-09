@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <map>
 #include <numeric>
 #include <sstream>
 #include <string>
@@ -36,7 +37,7 @@ Day4::Card::Card(std::string_view input) {
     }
 }
 
-int Day4::Card::worth() {
+int Day4::Card::wins() const {
     std::set<int> intersection;
     std::set_intersection(
         winningNumbers.begin(), winningNumbers.end(),
@@ -44,7 +45,12 @@ int Day4::Card::worth() {
         std::inserter(intersection, intersection.begin())
     );
 
-    return intersection.size() == 0 ? 0 : pow(2, intersection.size() - 1);
+    return intersection.size();
+}
+
+int Day4::Card::worth() const {
+    auto i = wins();
+    return i == 0 ? 0 : pow(2, i - 1);
 }
 
 std::vector<Day4::Card> parse_cards(const std::string& input) {
@@ -68,11 +74,25 @@ std::vector<Day4::Card> parse_cards(const std::string& input) {
 
 int Day4::solve_part1(std::string input) {
     auto cards = parse_cards(input);
-    return std::accumulate(cards.begin(), cards.end(), 0, [](auto acc, auto c) { return acc + c.worth(); });
+    return std::accumulate(cards.begin(), cards.end(), 0, [](auto acc, const auto& c) { return acc + c.worth(); });
 }
 
 int Day4::solve_part2(std::string input) {
-    return 0;
+    auto cards = parse_cards(input);
+    int total = 0;
+
+    std::map<int, int> card_counts;
+
+    for (auto& card : cards) {
+        card_counts[card.id]++;
+        for (int i = 0; i < card_counts[card.id]; ++i) {
+            for (int j = 1; j <= card.wins(); ++j) {
+                card_counts[card.id + j]++;
+            }
+        }
+    }
+
+    return std::accumulate(card_counts.begin(), card_counts.end(), 0, [](auto acc, auto cc) { return acc + cc.second; });
 }
 
 void Day4::solve(std::string input) {
