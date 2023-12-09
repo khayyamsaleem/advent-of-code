@@ -9,7 +9,8 @@
 auto registry = aoc::PuzzleRegistry::make_registry();
 
 TEST(Day1, Part1) {
-  auto d1 = dynamic_cast<aoc::Day1*>(registry.at(1)().get());
+  auto registry_entry = registry.at(1)();
+  auto d1 = dynamic_cast<aoc::Day1*>(registry_entry.get());
   EXPECT_EQ(d1->get_two_digit_number("1abc2"), 12);
   EXPECT_EQ(d1->get_two_digit_number("pqr3stu8vwx"), 38);
   EXPECT_EQ(d1->get_two_digit_number("a1b2c3d4e5f"), 15);
@@ -19,7 +20,8 @@ TEST(Day1, Part1) {
 }
 
 TEST(Day1, Part2) {
-  auto d1 = dynamic_cast<aoc::Day1*>(registry.at(1)().get());
+  auto registry_entry = registry.at(1)();
+  auto d1 = dynamic_cast<aoc::Day1*>(registry_entry.get());
   EXPECT_EQ(d1->get_two_digit_number_2("two1nine"), 29);
   EXPECT_EQ(d1->get_two_digit_number_2("eighttwothree"), 83);
   EXPECT_EQ(d1->get_two_digit_number_2("abcone2threexyz"), 13);
@@ -36,7 +38,8 @@ zoneight234
 }
 
 TEST(Day2, Part1) {
-  auto d2 = dynamic_cast<aoc::Day2*>(registry.at(2)().get());
+  auto registry_entry = registry.at(2)();
+  auto d2 = dynamic_cast<aoc::Day2*>(registry_entry.get());
   aoc::Day2::Game g = { 4, {
       {{"green", 1}, {"red", 3}, {"blue", 6}},
       {{"green", 3}, {"red", 6}},
@@ -76,7 +79,8 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 }
 
 TEST(Day2, Part2) {
-  auto d2 = dynamic_cast<aoc::Day2*>(registry.at(2)().get());
+  auto registry_entry = registry.at(2)();
+  auto d2 = dynamic_cast<aoc::Day2*>(registry_entry.get());
   auto test_input = R"(Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
 Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
 Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
@@ -89,7 +93,8 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 
 
 TEST(Day3, Part1) {
-  auto d3 = dynamic_cast<aoc::Day3*>(registry.at(3)().get());
+  auto registry_entry = registry.at(3)();
+  auto d3 = dynamic_cast<aoc::Day3*>(registry_entry.get());
   auto test_input = R"(467..114..
 ...*......
 ..35..633.
@@ -105,7 +110,8 @@ TEST(Day3, Part1) {
 }
 
 TEST(Day3, Part2) {
-  auto d3 = dynamic_cast<aoc::Day3*>(registry.at(3)().get());
+  auto registry_entry = registry.at(3)();
+  auto d3 = dynamic_cast<aoc::Day3*>(registry_entry.get());
   auto test_input = R"(467..114..
 ...*......
 ..35..633.
@@ -120,18 +126,30 @@ TEST(Day3, Part2) {
 }
 
 TEST(Day4, Part1) {
-  auto d4 = dynamic_cast<aoc::Day4*>(registry.at(4)().get());
+  auto registry_entry = registry.at(4)();
+  auto d4 = dynamic_cast<aoc::Day4*>(registry_entry.get());
   auto test_input = R"(Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
 Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
 Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
 Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83
 Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
 Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11)";
-  EXPECT_EQ(d4->solve_part1(test_input), 0);
+
+  std::string single_card = "Card 1: 41 48 83 86 17 | 83 86 6 31 17 9 48 53";
+  aoc::Day4::Card card(single_card);
+
+  EXPECT_EQ(card.id, 1);
+  EXPECT_EQ(card.winningNumbers.size(), 5);
+  EXPECT_EQ(card.myNumbers.size(), 8);
+
+  EXPECT_EQ(card.worth(), 8);
+
+  EXPECT_EQ(d4->solve_part1(test_input), 13);
 }
 
 TEST(Day4, Part2) {
-  auto d4 = dynamic_cast<aoc::Day4*>(registry.at(4)().get());
+  auto registry_entry = registry.at(4)();
+  auto d4 = dynamic_cast<aoc::Day4*>(registry_entry.get());
   auto test_input = R"(Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
 Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
 Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1

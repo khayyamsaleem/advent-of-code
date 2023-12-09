@@ -53,7 +53,7 @@ int Day2::Game::get_power() {
       cubesets.begin(),
       cubesets.end(),
       std::map<std::string, int>(),
-      [](auto& acc, const auto& draw) {
+      [](auto acc, const auto& draw) {
           for (const auto& [color, count]: draw) {
               if (acc.find(color) == acc.end() || count > acc[color]) {
                   acc[color] = count;

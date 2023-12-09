@@ -98,3 +98,5 @@ vcpkg_installed/
 
 ## build
 build
+## clang
+.cache 

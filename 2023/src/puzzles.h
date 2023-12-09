@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
-
+#include <set>
 #include "puzzle.h"
 
 namespace aoc {
@@ -22,7 +22,7 @@ class Day2 : public Puzzle {
 public:
   struct Game {
     int id;
-    std::vector<std::map<std::string, int>> cubesets;
+    std::vector<std::map<std::string,int> > cubesets;
 
     friend std::ostream& operator<<(std::ostream& os, const Game& game);
     bool operator==(const Game& other) const;
@@ -44,6 +44,14 @@ public:
 
 class Day4 : public Puzzle {
 public:
+  struct Card {
+    int id;
+    std::set<int> winningNumbers;
+    std::set<int> myNumbers;
+
+    explicit Card(const std::string_view input);
+    int worth();
+  };
   void solve(std::string input) override;
   int solve_part1(std::string input);
   int solve_part2(std::string input);
