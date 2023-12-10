@@ -124,12 +124,10 @@ long long Day5::solve_part2(std::string input) {
     size_t i = 0;
     for (const auto& range : seed_ranges) {
         threads.emplace_back([this, &transformers, &local_mins, i, range]() {
-            std::cout << "started range [" << range.first << ", " << range.second + range.first << ")" << std::endl;
             for (long long seed = range.first; seed < range.first + range.second; ++seed) {
                 long long transformed_seed = apply_transformers(seed, "seed", transformers);
                 local_mins[i] = std::min(local_mins[i], transformed_seed);
             }
-            std::cout << "finished range [" << range.first << ", " << range.second + range.first << ")" << std::endl;
         });
         ++i;
     }

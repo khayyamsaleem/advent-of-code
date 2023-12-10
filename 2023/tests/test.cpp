@@ -237,6 +237,23 @@ humidity-to-location map:
   EXPECT_EQ(d5->solve_part2(test_input), 46);
 }
 
+TEST(Day6, Part1And2) {
+  auto registry_entry = registry.at(6)();
+  auto d6 = dynamic_cast<aoc::Day6*>(registry_entry.get());
+  auto test_input = R"(Time:      7  15   30
+Distance:  9  40  200)";
+
+  std::ostringstream oss;
+  std::streambuf* p_cout_streambuf = std::cout.rdbuf();
+  std::cout.rdbuf(oss.rdbuf());
+
+  d6->solve(test_input);
+
+  std::cout.rdbuf(p_cout_streambuf);
+
+  EXPECT_EQ(oss.str(), "Day 6 Part 1: 288\nDay 6 Part 2: 71503\n");
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

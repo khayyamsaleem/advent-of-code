@@ -64,6 +64,11 @@ public:
   void solve(std::string input) override;
 };
 
+class Day6 : public Puzzle {
+public:
+  void solve(std::string input) override;
+};
+
 }
 
 #endif // PUZZLES_H

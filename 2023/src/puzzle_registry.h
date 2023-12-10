@@ -16,6 +16,7 @@ class PuzzleRegistry {
 public:
 static std::unordered_map<int, PuzzleRegistryFn> make_registry() {
     return {
+        {6, []() { return std::make_unique<Day6>(); }},
         {5, []() { return std::make_unique<Day5>(); }},
         {4, []() { return std::make_unique<Day4>(); }},
         {3, []() { return std::make_unique<Day3>(); }},
