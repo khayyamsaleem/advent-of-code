@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub fn fetchRawPuzzleInput(a: *std.mem.Allocator, cookie: []const u8, year: u16, day: u8) ![]u8 {
+pub fn fetchRawPuzzleInput(a: *std.mem.Allocator, cookie: []const u8, year: u16, day: u8) ![]const u8 {
     var client = std.http.Client{ .allocator = a.* };
     defer client.deinit();
 

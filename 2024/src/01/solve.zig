@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub fn solve(a: *std.mem.Allocator, input: []u8) !void {
+fn zsolve(a: *std.mem.Allocator, input: []const u8) !void {
     var lines = std.ArrayList([]const u8).init(a.*);
     defer lines.deinit();
 
@@ -54,4 +54,15 @@ pub fn solve(a: *std.mem.Allocator, input: []u8) !void {
     }
 
     try std.io.getStdOut().writer().print("Day 01 - Part 2: {d}\n", .{similarityScore});
+}
+
+pub export fn solve(input: [*:0]const u8) void {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var a = gpa.allocator();
+
+    zsolve(&a, std.mem.span(input)) catch |err| {
+        std.log.err("unable to solve: {}", .{err});
+        return;
+    };
 }
