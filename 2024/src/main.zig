@@ -44,17 +44,20 @@ pub fn main() !void {
         lib.close();
     }
 
-    const solve_fn = *const fn (input: *const u8) void;
+    const solve_fn = *const fn (input: [*:0]const u8) void;
     const solve = lib.lookup(solve_fn, "solve") orelse return error.FunctionNotFound;
 
     try dotenv.load(a, .{});
     const sessionCookie = try std.process.getEnvVarOwned(a, "SESSION");
     defer a.free(sessionCookie);
 
-    const puzzleInput = try aoc.fetchRawPuzzleInput(&a, sessionCookie, 2024, moduleNum);
+    const puzzleInput = try aoc.fetchRawPuzzleInput(a, sessionCookie, 2024, moduleNum);
     defer {
         a.free(puzzleInput);
     }
 
-    solve(@ptrCast(puzzleInput.ptr));
+    const i = try a.dupeZ(u8, puzzleInput);
+    defer a.free(i);
+
+    solve(i);
 }

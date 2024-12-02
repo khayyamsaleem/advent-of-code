@@ -1,20 +1,13 @@
 const std = @import("std");
 
-fn zsolve(a: *std.mem.Allocator, input: []const u8) !void {
-    var lines = std.ArrayList([]const u8).init(a.*);
-    defer lines.deinit();
-
-    var iter = std.mem.split(u8, input, "\n");
-    while (iter.next()) |line| {
-        try lines.append(line);
-    }
-
-    var left = std.ArrayList(i32).init(a.*);
-    var right = std.ArrayList(i32).init(a.*);
+fn zsolve(a: std.mem.Allocator, input: []const u8) !void {
+    var left = std.ArrayList(i32).init(a);
+    var right = std.ArrayList(i32).init(a);
     defer left.deinit();
     defer right.deinit();
 
-    for (lines.items) |line| {
+    var iter = std.mem.split(u8, input, "\n");
+    while (iter.next()) |line| {
         if (line.len == 0) {
             continue;
         }
@@ -59,9 +52,9 @@ fn zsolve(a: *std.mem.Allocator, input: []const u8) !void {
 pub export fn solve(input: [*:0]const u8) void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
-    var a = gpa.allocator();
+    const a = gpa.allocator();
 
-    zsolve(&a, std.mem.span(input)) catch |err| {
+    zsolve(a, std.mem.span(input)) catch |err| {
         std.log.err("unable to solve: {}", .{err});
         return;
     };
