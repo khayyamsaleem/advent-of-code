@@ -18,6 +18,9 @@ pub fn build(b: *std.Build) void {
     }).module("dotenv");
 
     exe.root_module.addImport("dotenv.zig", dotenv_mod);
+
+    exe.linkLibC();
+    exe.linkLibCpp();
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);
