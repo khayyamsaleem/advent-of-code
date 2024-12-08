@@ -22,5 +22,5 @@ make
 cd ./build/bin/
 ./aoc-2024 1 # or any other day ∈ [1,25]
 # or
-make run ARGS=1 # or any other day ∈ [1,25]
+make run ARGS=01 # or any other day ∈ [1,25]
 ```

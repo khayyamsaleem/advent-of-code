@@ -7,7 +7,8 @@ RUSTLIB = $(LIB_OUTPUT_DIR)/lib$(MODULE_NAME).so
 all:
 	mkdir -p $(LIB_OUTPUT_DIR)
 	$(CARGO) build --release --lib
-	cp $(TARGET)/libaoc_2024_day_03.so $(RUSTLIB)
+	cp $(TARGET)/libaoc_2024_day_03.so $(RUSTLIB) || true
+	cp $(TARGET)/libaoc_2024_day_03.dylib $(RUSTLIB) || true
 
 test:
 	$(CARGO) test
