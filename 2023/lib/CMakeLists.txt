@@ -1,1 +1,1 @@
-add_subdirectory(libaoc)
+add_subdirectory(aoc)

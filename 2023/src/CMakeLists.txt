@@ -2,12 +2,14 @@ include(FetchContent)
 
 ## puzzle dependencies
 find_package(Boost REQUIRED)
+find_package(fmt REQUIRED)
 
 ## puzzle linking
 file(GLOB PUZZLE_SOURCES "day*.cpp")
 add_library(puzzle STATIC ${PUZZLE_SOURCES})
 target_link_libraries(puzzle PRIVATE
   Boost::boost
+  fmt::fmt
 )
 
 ## main dependencies
@@ -23,7 +25,7 @@ add_subdirectory(${dotenv_SOURCE_DIR} ${dotenv_BINARY_DIR})
 ## main linking
 add_executable(aoc2023 main.cpp)
 target_link_libraries(aoc2023 PRIVATE
-  libaoc
+  aoc
   cpp_dotenv
   puzzle
 )

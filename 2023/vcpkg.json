@@ -5,6 +5,7 @@
     "curl",
     "gtest",
     "boost-algorithm",
-    "boost-iterator"
+    "boost-iterator",
+    "fmt"
   ]
 }

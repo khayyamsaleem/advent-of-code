@@ -254,6 +254,18 @@ Distance:  9  40  200)";
   EXPECT_EQ(oss.str(), "Day 6 Part 1: 288\nDay 6 Part 2: 71503\n");
 }
 
+TEST(Day7, Part1) {
+  auto registry_entry = registry.at(7)();
+  auto d7 = dynamic_cast<aoc::Day7*>(registry_entry.get());
+  auto test_input = R"(32T3K 765
+T55J5 684
+KK677 28
+KTJJT 220
+QQQJA 483)";
+
+  EXPECT_EQ(d7->solve_part1(test_input), 0);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

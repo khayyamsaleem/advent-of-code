@@ -79,7 +79,6 @@ int Day4::solve_part1(std::string input) {
 
 int Day4::solve_part2(std::string input) {
     auto cards = parse_cards(input);
-    int total = 0;
 
     std::map<int, int> card_counts;
 

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include <dotenv.h>
-#include <libaoc/get_input.h>
+#include <aoc/get_input.h>
 
 #include "puzzle_registry.h"
 #include "puzzles.h"
