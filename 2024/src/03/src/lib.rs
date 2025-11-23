@@ -40,8 +40,10 @@ pub extern "C" fn solve(input_ptr: *const c_char) {
         CStr::from_ptr(input_ptr)
     };
 
-    println!("Day 03 - Part 1: {}", part_one(c_str.to_str().unwrap()));
-    println!("Day 03 - Part 2: {}", part_two(c_str.to_str().unwrap()));
+    let input_str = c_str.to_str().unwrap();
+
+    println!("Day 03 - Part 1: {}", part_one(input_str));
+    println!("Day 03 - Part 2: {}", part_two(input_str));
 }
 
 
@@ -68,5 +70,12 @@ mod tests {
     fn test_part_two() {
         let input = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))";
         assert_eq!(part_two(input), 48);
+    }
+
+    #[test]
+    fn test_part_two_multiple_toggles() {
+        // mul(2,3)=6 [enabled], don't(), mul(4,5) [disabled], do(), mul(1,2)=2, don't(), mul(10,10) [disabled]
+        let input = "mul(2,3)don't()mul(4,5)do()mul(1,2)don't()mul(10,10)";
+        assert_eq!(part_two(input), 8);
     }
 }

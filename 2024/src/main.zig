@@ -1,5 +1,5 @@
 const std = @import("std");
-const dotenv = @import("dotenv.zig");
+// const dotenv = @import("dotenv.zig"); // Disabled due to hanging issue
 
 const aoc = @import("./aoc.zig");
 
@@ -13,7 +13,6 @@ pub fn main() !void {
         _ = gpa.deinit();
     }
     var a = gpa.allocator();
-
     const args = try std.process.argsAlloc(a);
     defer std.process.argsFree(a, args);
 
@@ -28,10 +27,12 @@ pub fn main() !void {
         return;
     }
 
-    const libname = try std.fmt.allocPrint(a, "libsolve{:0>2}.so", .{moduleNum});
-    defer a.free(libname);
+    var libname_buf: [32]u8 = undefined;
+    const libname = try std.fmt.bufPrint(&libname_buf, "libsolve{:0>2}.so", .{moduleNum});
 
-    const libprefix = std.process.getEnvVarOwned(std.heap.page_allocator, "AOC_LIB_PATH") catch "../lib";
+    const libprefix_owned = std.process.getEnvVarOwned(a, "AOC_LIB_PATH") catch null;
+    defer if (libprefix_owned) |p| a.free(p);
+    const libprefix = libprefix_owned orelse "../lib";
 
     const libpath = try std.fs.path.join(a, &.{ libprefix, libname });
     defer a.free(libpath);
@@ -44,20 +45,34 @@ pub fn main() !void {
         lib.close();
     }
 
-    const solve_fn = *const fn (input: [*:0]const u8) void;
+    const solve_fn = *const fn (input: [*c]const u8) callconv(.c) void;
     const solve = lib.lookup(solve_fn, "solve") orelse return error.FunctionNotFound;
 
-    try dotenv.load(a, .{});
-    const sessionCookie = try std.process.getEnvVarOwned(a, "SESSION");
+    const sessionCookie = std.process.getEnvVarOwned(a, "SESSION") catch blk: {
+        // Read .env file manually
+        const env_file = try std.fs.cwd().openFile(".env", .{});
+        defer env_file.close();
+
+        const contents = try env_file.readToEndAlloc(a, 1024 * 1024);
+        defer a.free(contents);
+
+        var lines = std.mem.splitScalar(u8, contents, '\n');
+        while (lines.next()) |line| {
+            if (std.mem.startsWith(u8, line, "SESSION=")) {
+                const value = std.mem.trim(u8, line[8..], &std.ascii.whitespace);
+                break :blk try a.dupe(u8, value);
+            }
+        }
+        return error.SessionNotFound;
+    };
     defer a.free(sessionCookie);
 
     const puzzleInput = try aoc.fetchRawPuzzleInput(a, sessionCookie, 2024, moduleNum);
-    defer {
-        a.free(puzzleInput);
-    }
+    defer a.free(puzzleInput);
 
+    // Convert to null-terminated slice for the solve function
     const i = try a.dupeZ(u8, puzzleInput);
     defer a.free(i);
 
-    solve(i);
+    solve(@ptrCast(i.ptr));
 }

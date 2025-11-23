@@ -1,12 +1,13 @@
 .{
-    .name = "aoc-2024",
+    .fingerprint = 0x823313d0c64a6459,
+    .name = .aoc_2024,
     .version = "0.0.1",
-    .minimum_zig_version = "0.13.0",
+    .minimum_zig_version = "0.15.0",
 
     .dependencies = .{
         .dotenv = .{
-            .url = "https://github.com/khayyamsaleem/dotenv.zig/archive/refs/tags/v0.1.3.tar.gz",
-            .hash = "122004bad8bdb7326a09695959d9db3a2b2c5f5d30ef338bb3888f3e362718ec04e7",
+            .url = "https://github.com/dying-will-bullet/dotenv/archive/refs/tags/v0.2.2.tar.gz",
+            .hash = "dotenv-0.2.2-ikMfwBB3AAC89NhL0EVbn6mRYA5z4fec8PcNKJ-P8m16",
         },
     },
     .paths = .{
