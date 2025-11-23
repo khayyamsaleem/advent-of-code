@@ -4,31 +4,31 @@ pub fn fetchRawPuzzleInput(a: std.mem.Allocator, cookie: []const u8, year: u16, 
     var client = std.http.Client{ .allocator = a };
     defer client.deinit();
 
-    const endpoint = try std.fmt.allocPrint(a, "https://adventofcode.com/{d}/day/{d}/input", .{ year, day });
-    defer a.free(endpoint);
+    var endpoint_buf: [128]u8 = undefined;
+    const endpoint = try std.fmt.bufPrint(&endpoint_buf, "https://adventofcode.com/{d}/day/{d}/input", .{ year, day });
 
-    const cookieHeaderValue = try std.fmt.allocPrint(a, "session={s}", .{cookie});
-    defer a.free(cookieHeaderValue);
+    var cookie_buf: [256]u8 = undefined;
+    const cookieHeaderValue = try std.fmt.bufPrint(&cookie_buf, "session={s}", .{cookie});
 
     const headers = [_]std.http.Header{
         .{ .name = "cookie", .value = cookieHeaderValue },
     };
 
-    var body = std.ArrayList(u8).init(a);
-    defer body.deinit();
+    var body_storage = std.io.Writer.Allocating.init(a);
+    defer body_storage.deinit();
 
-    const res = try client.fetch(.{
+    const fetch_result = try client.fetch(.{
         .location = .{ .url = endpoint },
         .method = .GET,
         .extra_headers = &headers,
-        .response_storage = .{ .dynamic = &body },
+        .response_writer = &body_storage.writer,
     });
 
-    if (res.status == .ok) {
-        return body.toOwnedSlice();
+    if (fetch_result.status != .ok) {
+        std.debug.print("got a non-200 status: {}\n", .{fetch_result.status});
+        return error.ResponseNotOk;
     }
 
-    std.debug.print("got a non-200 status: {d}\n", .{res.status});
-
-    return error.ResponseNotOk;
+    const body = try body_storage.toOwnedSlice();
+    return body;
 }

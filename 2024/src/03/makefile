@@ -1,4 +1,5 @@
-LIB_OUTPUT_DIR = ../../build/lib
+GIT_ROOT = $(shell git rev-parse --show-toplevel)
+LIB_OUTPUT_DIR = $(GIT_ROOT)/2024/build/lib
 MODULE_NAME = solve03
 CARGO = cargo
 TARGET = target/release
