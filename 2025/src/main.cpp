@@ -1,8 +1,8 @@
 #include "aoc.hpp"
-#include <iostream>
+#include <print>
 
 int main() {
     auto token = "";
-    std::cout << aoc::fetch_input(token, 1).value_or("") << std::endl;
+    std::println("{}", aoc::fetch_input(token, 1).value_or(""));
     return 0;
 }

@@ -3,7 +3,6 @@
 #include <httplib.h>
 #include <format>
 
-
 namespace aoc {
 
 const std::string AOC_HOST = "https://adventofcode.com";
