@@ -1,7 +1,8 @@
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 #include "aoc.hpp"
 #include <httplib.h>
-#include <iostream>
+#include <format>
+
 
 namespace aoc {
 

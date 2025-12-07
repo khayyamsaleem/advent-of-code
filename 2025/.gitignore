@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/bazel,c++,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=bazel,c++,macos
 
+external
+compile_commands.json
+.cache
 ### Bazel ###
 # gitignore template for Bazel build system
 # website: https://bazel.build/
@@ -84,4 +87,3 @@ Temporary Items
 *.icloud
 
 # End of https://www.toptal.com/developers/gitignore/api/bazel,c++,macos
-

@@ -1,0 +1,28 @@
+# aoc 2025
+
+this year, back to c++ but building with bazel!
+
+## build
+
+```bash
+bazel build //:aoc2025
+```
+
+## test
+
+```bash
+bazel test //... --test_output=all
+bazel coverage //...
+```
+
+## run
+
+```bash
+bazel run //:aoc2025
+```
+
+## generate `compile_commands.json` for ide support
+
+```bash
+bazel run @hedron_compile_commands//:refresh_all
+```

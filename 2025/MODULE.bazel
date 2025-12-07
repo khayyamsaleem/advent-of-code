@@ -1,29 +1,9 @@
 bazel_dep(name = "catch2", version = "3.11.0")
 bazel_dep(name = "cpp-httplib", version = "0.22.0")
 
-http_archive = use_repo_rule(
-    "@bazel_tools//tools/build_defs/repo:http.bzl",
-    "http_archive",
-)
-
-http_archive(
-    name = "dotenv_cpp",
-    urls = ["https://github.com/laserpants/dotenv-cpp/archive/refs/tags/v3.0.0.tar.gz"],
-    # The prefix must strip the outer folder created by GitHub's tarball.
-    strip_prefix = "dotenv-cpp-3.0.0",
-    integrity = "sha256-R/J2s4P0Xq50tOqG5H5R8FhW6r6Jc5O9W7h5W1qG2Ww=", # Use the current v3.0.0 hash
-    build_file_content = """
-cc_library(
-    name = "dotenv_cpp",
-    # The library is header-only, so all headers go into hdrs.
-    hdrs = glob([
-        "dotenv-cpp/include/**/*.h",
-    ]),
-    # The srcs list is empty for a header-only library.
-    srcs = [],
-    # This sets the public include path for the user (i.e., where Bazel looks for includes).
-    includes = ["dotenv-cpp/include"],
-    visibility = ["//visibility:public"],
-)
-""",
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    remote = "https://github.com/mikael-s-persson/bazel-compile-commands-extractor.git",
+    commit = "02d15621b528efd877f5d5657c4b738523a0eb17",
 )

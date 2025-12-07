@@ -1,29 +1,32 @@
 cc_library(
-	name = "aoc",
-	srcs = ["src/aoc.cpp"],
-	hdrs = ["include/aoc.hpp"],
-	includes = ["include"],
-    visibility = ["//visibility:public"],
-	deps = [
-		"@cpp-httplib//:cpp-httplib",
-	],
+  name = "aoc",
+  srcs = ["src/aoc.cpp"],
+  hdrs = ["include/aoc.hpp"],
+  includes = ["include"],
+  visibility = ["//visibility:public"],
+  deps = [
+    "@cpp-httplib//:cpp-httplib",
+  ],
+  copts = [
+    "-std=c++20",
+  ],
+  tags = ["coverage"],
 )
 
 cc_binary(
-	name = "aoc2025",
-	srcs = ["src/main.cpp"],
-	deps = [
-		":aoc",
-		"@cpp_dotenv//:cpp_dotenv",
-	],
+  name = "aoc2025",
+  srcs = ["src/main.cpp"],
+  deps = [
+    ":aoc",
+  ],
 )
 
 cc_test(
-	name = "aoc_test",
-	srcs = ["tests/test_main.cpp"],
-	deps = [
-		":aoc",
-		"@catch2//:catch2_main",
-	],
-    size = "small",
+  name = "aoc_test",
+  srcs = ["tests/test_main.cpp"],
+  deps = [
+    ":aoc",
+    "@catch2//:catch2_main",
+  ],
+  size = "small",
 )
