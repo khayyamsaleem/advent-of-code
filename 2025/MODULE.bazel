@@ -4,6 +4,26 @@ bazel_dep(name = "cpp-httplib", version = "0.22.0")
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
 git_override(
     module_name = "hedron_compile_commands",
+    # this commit fixes a bug in the extractor upstream:
+        # https://github.com/hedronvision/bazel-compile-commands-extractor/pull/219
     remote = "https://github.com/mikael-s-persson/bazel-compile-commands-extractor.git",
     commit = "02d15621b528efd877f5d5657c4b738523a0eb17",
+)
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "dotenv_cpp",
+    # Fetches the master branch. For production, replace with a specific commit hash/URL.
+    url = "https://github.com/laserpants/dotenv-cpp/archive/refs/heads/master.tar.gz",
+    strip_prefix = "dotenv-cpp-master",
+    # Inject a BUILD file since the repo doesn't have one
+    build_file_content = """
+cc_library(
+    name = "dotenv",
+    hdrs = glob(["include/laserpants/dotenv/*.h"]),
+    includes = ["include/laserpants/dotenv"],
+    visibility = ["//visibility:public"],
+)
+""",
 )

@@ -11,8 +11,8 @@ bazel build //:aoc2025
 ## test
 
 ```bash
-bazel test //... --test_output=all
-bazel coverage //...
+bazel test //... --test_output=all # run all tests
+bazel coverage //... # produce coverage
 ```
 
 ## run
