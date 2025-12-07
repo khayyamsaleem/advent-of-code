@@ -1,0 +1,44 @@
+exports_files([".env"])
+
+load("//:tools/dispatcher.bzl", "generate_dispatcher")
+
+generate_dispatcher(
+    name = "gen_dispatcher_cpp",
+    srcs = glob(["include/solutions/*.hpp"]),
+    out_name = "dispatcher.cpp",
+)
+
+cc_library(
+  name = "aoc",
+  srcs = ["src/aoc.cpp"] + glob(["src/solutions/*.cpp"]),
+  hdrs = ["include/aoc.hpp"] + glob(["include/solutions/*.hpp"]),
+  includes = ["include"],
+  visibility = ["//visibility:public"],
+  deps = [
+    "@cpp-httplib//:cpp-httplib",
+    "@dotenv_cpp//:dotenv"
+  ],
+  copts = [
+    "-std=c++23",
+  ],
+  tags = ["coverage"],
+)
+
+cc_binary(
+  name = "aoc2025",
+  srcs = ["src/main.cpp"] + [":gen_dispatcher_cpp"],
+  deps = [
+    ":aoc",
+  ],
+  data = [ "//:.env" ],
+)
+
+cc_test(
+  name = "aoc_tests",
+  srcs = glob(["tests/**/*_test.cpp"]),
+  deps = [
+    ":aoc",
+    "@catch2//:catch2_main",
+  ],
+  size = "small",
+)
