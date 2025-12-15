@@ -1,17 +1,23 @@
 exports_files([".env"])
 
+sh_binary(
+    name = "aoc-init",
+    srcs = ["tools/aoc-init.sh"],
+    visibility = ["//visibility:public"],
+)
+
 load("//:tools/dispatcher.bzl", "generate_dispatcher")
 
 generate_dispatcher(
     name = "gen_dispatcher_cpp",
-    srcs = glob(["include/solutions/*.hpp"]),
+    srcs = glob(["include/solutions/*.hpp"], allow_empty = True),
     out_name = "dispatcher.cpp",
 )
 
 cc_library(
   name = "aoc",
-  srcs = ["src/aoc.cpp"] + glob(["src/solutions/*.cpp"]),
-  hdrs = ["include/aoc.hpp"] + glob(["include/solutions/*.hpp"]),
+    srcs = ["src/aoc.cpp"] + glob(["src/solutions/*.cpp"], allow_empty = True),
+  hdrs = ["include/aoc.hpp"] + glob(["include/solutions/*.hpp"], allow_empty = True),
   includes = ["include"],
   visibility = ["//visibility:public"],
   deps = [
