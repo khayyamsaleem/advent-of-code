@@ -18,7 +18,7 @@ bazel run //:aoc-init -- $DAY
 
 ```bash
 bazel test //... --test_output=all # run all tests
-bazel coverage //... # produce coverage
+source tools/coverage-env.sh && bazel coverage //... # produce coverage
 ```
 
 ## run
@@ -30,6 +30,6 @@ bazel run //:aoc2025
 ## generate `compile_commands.json` for ide support
 
 ```bash
-bazel run @hedron_compile_commands//:refresh_all
+bazel run //:refresh_compile_commands
 ```
 

@@ -4,16 +4,20 @@
 
 _find_llvm_tool() {
   local tool="$1"
-  for candidate in \
-    "$(xcrun --find "$tool" 2>/dev/null)" \
-    "$(brew --prefix llvm 2>/dev/null)/bin/$tool" \
-    "$(command -v "$tool" 2>/dev/null)"; do
-    if [ -x "$candidate" ]; then
-      echo "$candidate"
-      return
-    fi
-  done
-  echo "warning: $tool not found. Install LLVM (e.g. brew install llvm)." >&2
+  local _candidate
+  case "$(uname -s)" in
+    Darwin)
+      _candidate="$(xcrun --find "$tool" 2>/dev/null)" && [ -x "$_candidate" ] && echo "$_candidate" && return
+      _candidate="$(brew --prefix llvm 2>/dev/null)/bin/$tool" && [ -x "$_candidate" ] && echo "$_candidate" && return
+      ;;
+    Linux)
+      _candidate="$(command -v "$tool" 2>/dev/null)" && [ -x "$_candidate" ] && echo "$_candidate" && return
+      for v in 20 19 18 17 16 15; do
+        _candidate="$(command -v "${tool}-${v}" 2>/dev/null)" && [ -x "$_candidate" ] && echo "$_candidate" && return
+      done
+      ;;
+  esac
+  echo "warning: $tool not found. Install LLVM (e.g. brew install llvm / apt install llvm)." >&2
 }
 
 export LLVM_PROFDATA="${LLVM_PROFDATA:-$(_find_llvm_tool llvm-profdata)}"

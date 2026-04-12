@@ -3,6 +3,7 @@
 
 external
 compile_commands.json
+coverage-report
 .cache
 ### Bazel ###
 # gitignore template for Bazel build system
