@@ -4,15 +4,15 @@ build --action_env=CC=clang
 build --action_env=CXX=clang++
 build --cxxopt="-Wno-unused-command-line-argument"
 
-# LLVM coverage — requires LLVM_PROFDATA and LLVM_COV in env.
-# Run: source tools/coverage-env.sh && bazel coverage //...
+# LLVM coverage configuration.
 # --spawn_strategy=local: avoids sandbox so clang embeds resolvable source paths
 # --copt=-ffile-compilation-dir=.: makes clang emit relative paths in coverage data
 # Without these, the LCOV merger can't match sandbox paths to the source manifest.
+# tools/llvm-{profdata,cov} are wrappers that find the platform's LLVM tools.
 coverage --combined_report=lcov
 coverage --experimental_use_llvm_covmap
 coverage --experimental_generate_llvm_lcov
 coverage --spawn_strategy=local
 coverage --copt=-ffile-compilation-dir=.
-coverage --test_env=LLVM_PROFDATA
-coverage --test_env=LLVM_COV
+coverage --test_env=LLVM_PROFDATA=tools/llvm-profdata
+coverage --test_env=LLVM_COV=tools/llvm-cov

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Wrapper that delegates to the platform's llvm-cov.
+case "$(uname -s)" in
+  Darwin) exec "$(xcrun --find llvm-cov 2>/dev/null || echo llvm-cov)" "$@" ;;
+  *)      exec llvm-cov "$@" ;;
+esac

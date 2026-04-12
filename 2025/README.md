@@ -18,7 +18,7 @@ bazel run //:aoc-init -- $DAY
 
 ```bash
 bazel test //... --test_output=all # run all tests
-source tools/coverage-env.sh && bazel coverage //... # produce coverage
+bazel coverage //... # produce coverage
 ```
 
 ## run
