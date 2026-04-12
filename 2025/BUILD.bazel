@@ -1,3 +1,10 @@
+load("@hedron_compile_commands//:refresh_compile_commands.bzl", "refresh_compile_commands")
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_cc//cc:cc_test.bzl", "cc_test")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("//:tools/dispatcher.bzl", "generate_dispatcher")
+
 exports_files([".env"])
 
 sh_binary(
@@ -5,8 +12,6 @@ sh_binary(
     srcs = ["tools/aoc-init.sh"],
     visibility = ["//visibility:public"],
 )
-
-load("//:tools/dispatcher.bzl", "generate_dispatcher")
 
 generate_dispatcher(
     name = "gen_dispatcher_cpp",
@@ -47,4 +52,18 @@ cc_test(
     "@catch2//:catch2_main",
   ],
   size = "small",
+  env = {
+    # Suppress Catch2 shard warnings when not using Bazel sharding
+    "TEST_SHARD_INDEX": "0",
+    "TEST_TOTAL_SHARDS": "1",
+    "TEST_SHARD_STATUS_FILE": "/dev/null",
+  },
+)
+
+refresh_compile_commands(
+    name = "refresh_compile_commands",
+    targets = {
+        "//:aoc2025": "--features=-parse_headers",
+        "//:aoc_tests": "--features=-parse_headers",
+    },
 )

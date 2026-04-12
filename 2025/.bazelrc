@@ -3,3 +3,9 @@ build --cxxopt="-std=c++23"
 build --action_env=CC=clang
 build --action_env=CXX=clang++
 build --cxxopt="-Wno-unused-command-line-argument"
+
+# LLVM coverage support — LLVM_PROFDATA and LLVM_COV are passed through from the
+# host environment and auto-detected via .envrc or tools/coverage-env.sh.
+coverage --combined_report=lcov
+coverage --action_env=LLVM_PROFDATA
+coverage --action_env=LLVM_COV

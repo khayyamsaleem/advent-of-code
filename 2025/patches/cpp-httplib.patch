@@ -1,0 +1,10 @@
+# Bazel 9 removed cc_library as a native rule. The cpp-httplib BCR overlay
+# (v0.22.0) still uses cc_library without a load(), so we patch it in.
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -1,3 +1,5 @@
++load("@rules_cc//cc:cc_library.bzl", "cc_library")
++
+ cc_library(
+     name = "httplib",
+     hdrs = ["httplib.h"],

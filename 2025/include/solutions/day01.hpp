@@ -9,7 +9,7 @@
 
 namespace day01 {
 
-  using PASSWORD_METHOD = int;
+  using PASSWORD_METHOD = long;
 
   const PASSWORD_METHOD d1p1 = 0x0;
   const PASSWORD_METHOD d1p2 = 0x434C49434B;
