@@ -38,6 +38,7 @@ cc_library(
 cc_binary(
   name = "aoc2025",
   srcs = ["src/main.cpp"] + [":gen_dispatcher_cpp"],
+  copts = ["-std=c++23"],
   deps = [
     ":aoc",
   ],
@@ -47,6 +48,7 @@ cc_binary(
 cc_test(
   name = "aoc_tests",
   srcs = glob(["tests/**/*_test.cpp"]),
+  copts = ["-std=c++23"],
   deps = [
     ":aoc",
     "@catch2//:catch2_main",
