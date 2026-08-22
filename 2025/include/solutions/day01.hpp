@@ -1,6 +1,5 @@
 #include "aoc.hpp"
 #include <algorithm>
-#include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <ostream>
@@ -51,9 +50,9 @@ namespace day01 {
   inline auto spin(auto rotations, const PASSWORD_METHOD pm) {
     return std::ranges::fold_left(rotations, dial{DIAL_START, 0}, [pm](auto acc, rotation r) {
         if (pm == d1p2) {
-            if (r.dir > 0) { 
+            if (r.dir > 0) {
                 acc.zero_count += (acc.val + r.clicks) / DIAL_SIZE;
-            } else { 
+            } else {
                 auto dist = (acc.val == 0) ? DIAL_SIZE : acc.val;
                 acc.zero_count += (r.clicks + DIAL_SIZE - dist) / DIAL_SIZE;
             }
