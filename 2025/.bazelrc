@@ -1,4 +1,5 @@
 test --test_output=all
+test --strategy=TestRunner=standalone
 build --cxxopt="-std=c++23"
 build --action_env=CC=clang
 build --action_env=CXX=clang++

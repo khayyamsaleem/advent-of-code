@@ -1,11 +1,6 @@
 exports_files([".env"])
 
-sh_binary(
-    name = "aoc-init",
-    srcs = ["tools/aoc-init.sh"],
-    visibility = ["//visibility:public"],
-)
-
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary", "cc_test")
 load("//:tools/dispatcher.bzl", "generate_dispatcher")
 
 generate_dispatcher(
@@ -21,11 +16,15 @@ cc_library(
   includes = ["include"],
   visibility = ["//visibility:public"],
   deps = [
-    "@cpp-httplib//:cpp-httplib",
+    "@cpp_httplib//:cpp-httplib",
     "@dotenv_cpp//:dotenv"
   ],
   copts = [
     "-std=c++23",
+  ],
+  linkopts = [
+    "-lssl",
+    "-lcrypto",
   ],
   tags = ["coverage"],
 )

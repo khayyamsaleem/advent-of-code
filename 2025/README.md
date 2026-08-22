@@ -11,7 +11,7 @@ bazel build //:aoc2025
 ## generate new solution starter code
 
 ```bash
-bazel run //:aoc-init -- $DAY
+bash tools/aoc-init.sh <day-number>
 ```
 
 ## test
