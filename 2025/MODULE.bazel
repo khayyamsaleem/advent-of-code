@@ -20,6 +20,15 @@ single_version_override(
     patch_strip = 1,
 )
 
+# boringssl was resolved to a snapshot (0.0.0-20240530-2db0eb3) whose
+# crypto/internal.h unconditionally uses `_Generic` in public-facing
+# headers, but `_Generic` is a C-only keyword that GCC rejects in C++
+# mode. Bump to a newer snapshot that has the `__cplusplus` guard.
+single_version_override(
+    module_name = "boringssl",
+    version = "0.20260813.0",
+)
+
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
