@@ -1,6 +1,7 @@
 #include "aoc.hpp"
 #include "dotenv.h"
 #include <charconv>
+#include <exception>
 #include <memory>
 #include <print>
 #include <span>
@@ -38,8 +39,13 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::println("Part 1: {}", solution->p1(*input));
-    std::println("Part 2: {}", solution->p2(*input));
+    try {
+        std::println("Part 1: {}", solution->p1(*input));
+        std::println("Part 2: {}", solution->p2(*input));
+    } catch (const std::exception& e) {
+        std::println(stderr, "Error: {}", e.what());
+        return 1;
+    }
 
     return 0;
 }

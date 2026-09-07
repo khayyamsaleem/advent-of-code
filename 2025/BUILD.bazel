@@ -4,6 +4,7 @@ load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("//:tools/dispatcher.bzl", "generate_dispatcher")
+load("//:tools/go_solutions.bzl", "discover_go_days", "go_solutions")
 
 exports_files([".env"])
 
@@ -13,9 +14,18 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
+GO_DAYS = discover_go_days(glob(["go/day*/*.go"], allow_empty = True))
+
+go_solutions(
+    name = "go_solutions",
+    days = GO_DAYS,
+)
+
 generate_dispatcher(
     name = "gen_dispatcher_cpp",
     srcs = glob(["include/solutions/*.hpp"], allow_empty = True),
+    go_days = sorted(GO_DAYS),
+    go_header = "go_solutions.h",
     out_name = "dispatcher.cpp",
 )
 
@@ -41,6 +51,7 @@ cc_binary(
   copts = ["-std=c++23"],
   deps = [
     ":aoc",
+    ":go_solutions",
   ],
   data = [ "//:.env" ],
 )
