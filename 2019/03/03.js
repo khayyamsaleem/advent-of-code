@@ -1,5 +1,3 @@
-// couldn't figure out how to make a request with `https` lib so used this one
-const request = require('request-promise')
 const fs = require('fs')
 const path = require('path')
 const { Worker } = require("worker_threads")
@@ -32,15 +30,15 @@ const intersection = (a, b) =>  {
 }
 
 // retrieves input from AOC for day 3
-const getInput = (sessionCookie) => {
-    return request({
+const getInput = async (sessionCookie) => {
+    const res = await fetch("https://adventofcode.com/2019/day/3/input", {
         method: "GET",
-        uri: "http://adventofcode.com/2019/day/3/input",
         headers: {
             "Cookie": `session=${sessionCookie}`,
             "User-Agent": USER_AGENT
         }
     })
+    return res.text()
 }
 
 // computes part one answer given intersections

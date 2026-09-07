@@ -8,9 +8,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Khayyam Saleem",
-  "license": "ISC",
-  "dependencies": {
-    "request": "^2.88.0",
-    "request-promise": "^4.2.5"
-  }
+  "license": "ISC"
 }

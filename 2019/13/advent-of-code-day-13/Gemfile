@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 gem 'dotenv'
-gem 'minitest'
-gem 'faraday'
+gem 'minitest', '~> 5.14'
+gem 'faraday', '>= 1.10.6', '< 2'
 gem 'rubocop'

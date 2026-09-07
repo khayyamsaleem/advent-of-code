@@ -3,9 +3,8 @@
     "description": "Solution code for advent of code 2019 day 6",
     "type": "project",
     "require": {
-        "graphaware/neo4j-php-client": "^4.8",
-        "vlucas/phpdotenv": "^4.0",
-        "nategood/httpful": "^0.2.20"
+        "laudis/neo4j-php-client": "^2.8",
+        "vlucas/phpdotenv": "^5.5"
     },
     "authors": [
         {

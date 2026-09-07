@@ -1,4 +1,4 @@
-FROM composer
+FROM composer AS composer_stage
 WORKDIR /app
 COPY composer.json /app
 RUN docker-php-ext-install bcmath
@@ -8,5 +8,5 @@ FROM php:alpine
 WORKDIR /app
 COPY . /app
 RUN docker-php-ext-install bcmath
-COPY --from=0 /app/vendor /app/vendor
+COPY --from=composer_stage /app/vendor /app/vendor
 CMD ["php", "index.php"]

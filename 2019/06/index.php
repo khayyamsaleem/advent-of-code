@@ -2,35 +2,41 @@
 
 require_once 'vendor/autoload.php';
 
-use GraphAware\Neo4j\Client\ClientBuilder;
+use Laudis\Neo4j\ClientBuilder;
+use Laudis\Neo4j\Contracts\TransactionInterface;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 function getInput($uri) {
-    $session_cookie = getenv("session");
+    $session_cookie = $_ENV["session"];
 
-    $response = \Httpful\Request::get($uri)
-        ->addHeader("Cookie", "session={$session_cookie}")
-        ->send();
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'header' => "Cookie: session={$session_cookie}\r\n" .
+                "User-Agent: github.com/khayyamsaleem/advent-of-code by hello@khayyam.me\r\n"
+        ]
+    ]);
+    $body = file_get_contents($uri, false, $context);
 
-    return explode(PHP_EOL,trim($response->body));
+    return explode(PHP_EOL, trim($body));
 };
 
 
 function buildGraph($neo4j_client, $orbits) {
-    $stack = $neo4j_client->stack();
-    $stack->push('CREATE CONSTRAINT ON (o:Object) ASSERT o.name IS UNIQUE');
-    foreach ($orbits as $orbit) {
-        [$orbitee, $orbiter] = explode(')', $orbit);
-        $stack->push(
-            'MERGE (m:Object {name: {orbiter}})
-             MERGE (n:Object {name: {orbitee}})
-             MERGE (n)-[:ORBITED_BY {cost: 1.0}]->(m)',
-            ['orbiter' => $orbiter, 'orbitee' => $orbitee]
-        );
-    }
-    $neo4j_client->runStack($stack);
+    $neo4j_client->run('CREATE CONSTRAINT ON (o:Object) ASSERT o.name IS UNIQUE');
+    $neo4j_client->writeTransaction(function (TransactionInterface $tsx) use ($orbits) {
+        foreach ($orbits as $orbit) {
+            [$orbitee, $orbiter] = explode(')', $orbit);
+            $tsx->run(
+                'MERGE (m:Object {name: $orbiter})
+                 MERGE (n:Object {name: $orbitee})
+                 MERGE (n)-[:ORBITED_BY {cost: 1.0}]->(m)',
+                ['orbiter' => $orbiter, 'orbitee' => $orbitee]
+            );
+        }
+    });
 };
 
 function partOne($neo4j_client) {
@@ -38,14 +44,14 @@ function partOne($neo4j_client) {
               CALL algo.shortestPath.deltaStepping.stream(n, "cost", 3.0)
               YIELD nodeId, distance
               MATCH (destination) WHERE id(destination) = nodeId
-              RETURN SUM(distance)';
-    return intval($neo4j_client->run($QUERY)->getRecord()->value('SUM(distance)'));
+              RETURN SUM(distance) AS total';
+    return intval($neo4j_client->run($QUERY)->first()->get('total'));
 }
 
 function partTwo($neo4j_client) {
     $QUERY = 'MATCH path=(:Object {name: "YOU"})-[*]-(:Object {name: "SAN"})
-              RETURN length(path) - 2';
-    return $neo4j_client->run($QUERY)->getRecord()->value("length(path) - 2");
+              RETURN length(path) - 2 AS hops';
+    return $neo4j_client->run($QUERY)->first()->get('hops');
 }
 
 function main() {
@@ -53,8 +59,8 @@ function main() {
     $uri = "https://adventofcode.com/2019/day/6/input";
 
     $client = ClientBuilder::create()
-        ->addConnection('bolt', getenv("bolt_uri"))
-        ->setDefaultTimeout(30)
+        ->withDriver('bolt', $_ENV["bolt_uri"])
+        ->withDefaultDriver('bolt')
         ->build();
     buildGraph($client, getInput($uri));
     echo partOne($client);

@@ -3,9 +3,30 @@ GEM
   specs:
     ast (2.4.1)
     dotenv (2.7.6)
-    faraday (1.0.1)
-      multipart-post (>= 1.2, < 3)
-    minitest (5.14.2)
+    faraday (1.10.6)
+      faraday-em_http (~> 1.0)
+      faraday-em_synchrony (~> 1.0)
+      faraday-excon (~> 1.1)
+      faraday-httpclient (~> 1.0)
+      faraday-multipart (~> 1.0)
+      faraday-net_http (~> 1.0)
+      faraday-net_http_persistent (~> 1.0)
+      faraday-patron (~> 1.0)
+      faraday-rack (~> 1.0)
+      faraday-retry (~> 1.0)
+      ruby2_keywords (>= 0.0.4)
+    faraday-em_http (1.0.0)
+    faraday-em_synchrony (1.0.1)
+    faraday-excon (1.1.0)
+    faraday-httpclient (1.0.1)
+    faraday-multipart (1.2.0)
+      multipart-post (~> 2.0)
+    faraday-net_http (1.0.2)
+    faraday-net_http_persistent (1.2.0)
+    faraday-patron (1.0.0)
+    faraday-rack (1.0.0)
+    faraday-retry (1.0.4)
+    minitest (5.27.0)
     multipart-post (2.1.1)
     parallel (1.19.2)
     parser (2.7.1.4)
@@ -25,6 +46,7 @@ GEM
     rubocop-ast (0.3.0)
       parser (>= 2.7.1.4)
     ruby-progressbar (1.10.1)
+    ruby2_keywords (0.0.5)
     unicode-display_width (1.7.0)
 
 PLATFORMS
@@ -32,9 +54,9 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv
-  faraday
-  minitest
+  faraday (>= 1.10.6, < 2)
+  minitest (~> 5.14)
   rubocop
 
 BUNDLED WITH
-   2.1.4
+  4.0.20
