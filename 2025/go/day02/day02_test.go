@@ -5,17 +5,24 @@ import (
 	"testing"
 )
 
-func TestParse(t *testing.T) {
+func TestPumpBounds(t *testing.T) {
 	input := `11-22,95-115`
 
-	got := Parse(input)
+	ch := make(chan bound)
+	go PumpBounds(input, ch)
+
+	got := []bound{}
+	for b := range ch {
+		got = append(got, b)
+	}
+
 	want := []bound{
 		{x: 11, y: 22},
 		{x: 95, y: 115},
 	}
 
 	if !slices.Equal(got, want) {
-		t.Errorf("Parse() = %q, want %q", got, want)
+		t.Errorf("PumpBounds() = %q, want %q", got, want)
 	}
 }
 

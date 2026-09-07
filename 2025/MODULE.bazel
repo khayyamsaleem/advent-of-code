@@ -1,11 +1,22 @@
 bazel_dep(name = "catch2", version = "3.11.0")
 bazel_dep(name = "cpp-httplib", version = "0.22.0")
+bazel_dep(name = "gazelle", version = "0.54.0")
 bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(name = "rules_go", version = "0.63.0")
 bazel_dep(name = "rules_shell", version = "0.6.1")
 
 go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
 go_sdk.download(version = "1.27.1")
+
+# Only golang.org/x/sync/errgroup is needed, pulled in directly (no go.mod in
+# this repo) via gazelle's go_deps extension.
+go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
+go_deps.module(
+    path = "golang.org/x/sync",
+    sum = "h1:l60nONMj9l5drqw6jlhIELNv9I0A4OFgRsG9k2oT9Ug=",
+    version = "v0.17.0",
+)
+use_repo(go_deps, "org_golang_x_sync")
 
 bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
 git_override(

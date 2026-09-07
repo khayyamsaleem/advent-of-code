@@ -9,6 +9,11 @@ load("@rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
 
 IMPORTPATH_PREFIX = "github.com/khayyamsaleem/advent-of-code/2025/go"
 
+# External deps needed by individual days, keyed by day number.
+EXTRA_DEPS = {
+    "02": ["@org_golang_x_sync//errgroup"],
+}
+
 def _bridge_src_impl(ctx):
     imports = []
     exports = []
@@ -87,6 +92,7 @@ def go_solutions(name, days):
             name = lib,
             srcs = days[day]["srcs"],
             importpath = "{}/day{}".format(IMPORTPATH_PREFIX, day),
+            deps = EXTRA_DEPS.get(day, []),
         )
 
         if days[day]["tests"]:

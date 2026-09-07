@@ -2,8 +2,11 @@ package day02
 
 import (
 	"fmt"
-	"strings"
 	"strconv"
+	"strings"
+	"sync/atomic"
+
+	"golang.org/x/sync/errgroup"
 )
 
 type bound struct {
@@ -11,8 +14,8 @@ type bound struct {
 	y int
 }
 
-func Parse(input string) []bound {
-	ranges := []bound{}
+func PumpBounds(input string, ch chan<- bound) {
+	defer close(ch)
 	for _, b := range strings.Split(strings.TrimSpace(input), ",") {
 		s := strings.Split(b, "-")
 		x, err := strconv.Atoi(s[0])
@@ -23,46 +26,67 @@ func Parse(input string) []bound {
 		if err != nil {
 			panic(err)
 		}
-		ranges = append(ranges, bound{x: x, y: y})
+		ch <- bound{x: x, y: y}
 	}
-	return ranges
 }
 
 func P1(input string) string {
-	ranges := Parse(input)
-	t := 0
-	for _, r := range ranges {
-		for n := r.x; n <= r.y; n++ {
-			s := fmt.Sprintf("%d", n)
-			if len(s) % 2 != 0 || len(s) < 2 {
-				continue
+	ch := make(chan bound)
+	go PumpBounds(input, ch)
+
+	var eg errgroup.Group
+	var t atomic.Int64
+	for r := range ch {
+		eg.Go(func() error {
+			var local int64
+			for n := r.x; n <= r.y; n++ {
+				s := fmt.Sprintf("%d", n)
+				if len(s)%2 != 0 || len(s) < 2 {
+					continue
+				}
+				if s[:len(s)/2] != s[len(s)/2:] {
+					continue
+				}
+				v, err := strconv.Atoi(s)
+				if err != nil {
+					return err
+				}
+				local += int64(v)
 			}
-			if s[:len(s)/2] != s[len(s)/2:] {
-				continue
-			}
-			v, err := strconv.Atoi(s)
-			if err != nil {
-				panic(err)
-			}
-			t += v
-		}
+			t.Add(local)
+			return nil
+		})
 	}
-	return fmt.Sprintf("%d", t)
+	if err := eg.Wait(); err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf("%d", t.Load())
 }
 
 func P2(input string) string {
-	ranges := Parse(input)
-	t := 0
-	for _, r := range ranges {
-		for i := r.x; i <= r.y; i++ {
-			if i == 0 {
-				continue
+	ch := make(chan bound)
+	go PumpBounds(input, ch)
+
+	var eg errgroup.Group
+	var t atomic.Int64
+	for r := range ch {
+		eg.Go(func() error {
+			var local int64
+			for i := r.x; i <= r.y; i++ {
+				if i == 0 {
+					continue
+				}
+				s := fmt.Sprintf("%d", i)
+				if strings.Contains(fmt.Sprintf("%d%d", i, i)[1:len(s)*2-1], s) {
+					local += int64(i)
+				}
 			}
-			s := fmt.Sprintf("%d", i)
-			if strings.Contains(fmt.Sprintf("%d%d",i,i)[1:len(s)*2-1], s) {
-				t += i
-			}
-		}
+			t.Add(local)
+			return nil
+		})
 	}
-	return fmt.Sprintf("%d", t)
+	if err := eg.Wait(); err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf("%d", t.Load())
 }
